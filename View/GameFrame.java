@@ -6,27 +6,31 @@ import javax.swing.JPanel;
 import java.awt.CardLayout;
 
 public class GameFrame extends JFrame {
-	private static final GameFrame instance = new GameFrame();
+	private static final GameFrame _instance = new GameFrame();
 
-	private CardLayout cardLayout;
-	private JPanel cardPanel;
+	private CardLayout _cardLayout;
+	private JPanel _cardPanel;
 
-	private MenuPanel mp;
-	private GamePanel gp;
+	private MenuPanel _mp;
+	private GameSettingPanel _gsp;
+	private GamePanel _gp;
 
 	public GameFrame() {
 		initComponent();
 		initUI();
+		this.add(_cardPanel);
 	}
 
 	private void initComponent() {
-		cardLayout = new CardLayout();
-		cardPanel = new JPanel(cardLayout);
-		mp = new MenuPanel();
-		gp = new GamePanel();
+		_cardLayout = new CardLayout();
+		_cardPanel = new JPanel(_cardLayout);
+		_mp = new MenuPanel();
+		_gsp = new GameSettingPanel();
+		_gp = new GamePanel();
 
-		cardPanel.add(mp, "mp");
-		cardPanel.add(gp, "gp");
+		_cardPanel.add(_mp, "mp");
+		_cardPanel.add(_gsp, "gsp");
+		_cardPanel.add(_gp, "gp");
 	}
 
 	private void initUI() {
@@ -36,25 +40,26 @@ public class GameFrame extends JFrame {
 	}
 
 	public static GameFrame getInstance() {
-		return instance;
+		return _instance;
 	}
 
 	public void start() {
-		this.add(cardPanel);
+		
 		showMainMenu();
+		
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 
 	public void showMainMenu() {
-		cardLayout.show(cardPanel, "mp");
-		mp.requestFocusInWindow();
+		_cardLayout.show(_cardPanel, "mp");
+		_mp.requestFocusInWindow();
 	}
 
 	public void playGame() {
-		cardLayout.show(cardPanel, "gp");
-		gp.requestFocusInWindow();
+		_cardLayout.show(_cardPanel, "gp");
+		_gp.requestFocusInWindow();
 	}
 
 }

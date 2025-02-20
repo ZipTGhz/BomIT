@@ -14,7 +14,7 @@ public class MenuPanel extends JPanel {
 
 	public MenuPanel() {
 		this.setPreferredSize(
-				new Dimension(IGameSettings.Setting.GAME_WIDTH, IGameSettings.Setting.GAME_HEIGHT));
+				new Dimension(IGameSettings.Config.GAME_WIDTH, IGameSettings.Config.GAME_HEIGHT));
 
 		initPanel();
 	}
