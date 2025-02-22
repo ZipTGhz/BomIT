@@ -1,10 +1,25 @@
 package Model;
 
-public class Bot {
+import java.awt.Graphics;
+import java.util.Random;
 
-    public void Update() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'Update'");
-    }
+public class Bot extends Character {
+	private Random random = new Random();
+
+
+	public Bot(int x, int y, int speed) {
+		super(x, y, speed);
+		this.heart = 1;
+	}
+
+
+	@Override
+	public void update() {}
+
+	@Override
+	public void render(Graphics g) {
+		super.render(g);
+	}
+
 
 }

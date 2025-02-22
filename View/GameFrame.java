@@ -6,8 +6,6 @@ import javax.swing.JPanel;
 import java.awt.CardLayout;
 
 public class GameFrame extends JFrame {
-	private static final GameFrame _instance = new GameFrame();
-
 	private CardLayout _cardLayout;
 	private JPanel _cardPanel;
 
@@ -39,15 +37,10 @@ public class GameFrame extends JFrame {
 		this.setResizable(false);
 	}
 
-	public static GameFrame getInstance() {
-		return _instance;
-	}
-
 	public void start() {
-		
-		showMainMenu();
-		
-		this.pack();
+
+		playGame();
+		pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
@@ -59,6 +52,7 @@ public class GameFrame extends JFrame {
 
 	public void playGame() {
 		_cardLayout.show(_cardPanel, "gp");
+		_gp.startGameThread();
 		_gp.requestFocusInWindow();
 	}
 
