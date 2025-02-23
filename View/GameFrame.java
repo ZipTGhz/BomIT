@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import java.awt.CardLayout;
 
 public class GameFrame extends JFrame {
-	private static final GameFrame _instance = new GameFrame();
+	private static final GameFrame _instance = GameFrame.getInstance();;
 
 	private CardLayout _cardLayout;
 	private JPanel _cardPanel;
