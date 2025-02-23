@@ -23,7 +23,7 @@ public class MenuPanel extends JPanel {
 	private boolean isMuted = false;
 	private Clip backgroundMusic;
 	private int buttonWidth = 200;
-	private int buttonHeight = 60;
+	private int buttonHeight = 55;
 	private int startButtonX, startButtonY;
 	private int howToPlayButtonX, howToPlayButtonY;
 	private int closeButtonX, closeButtonY;
@@ -176,8 +176,14 @@ public class MenuPanel extends JPanel {
 			g.drawImage(closeButtonImage, closeButtonX, closeButtonY, closeButtonSize, closeButtonSize, null);
 		}
 
-		// Vẽ nút âm thanh (mute/unmute)
+		int adjustedHeight = soundButtonSize - 10;
+
 		BufferedImage soundIcon = isMuted ? muteImage : unmuteImage;
-		g.drawImage(soundIcon, soundButtonX, soundButtonY, soundButtonSize, soundButtonSize, null);
+		int drawHeight = isMuted ? soundButtonSize : adjustedHeight;
+		int drawY = isMuted ? soundButtonY : soundButtonY + 6;
+
+		g.drawImage(soundIcon, soundButtonX, drawY, soundButtonSize, drawHeight, null);
+
+
 	}
 }
