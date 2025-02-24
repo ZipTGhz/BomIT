@@ -58,9 +58,17 @@ public class Vector2 {
 	 * @param other Vector cần so sánh.
 	 * @return {@code true} nếu hai vector có cùng tọa độ, {@code false} nếu khác nhau.
 	 */
-	public boolean equals(Vector2 other) {
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true; // Cùng tham chiếu thì chắc chắn bằng nhau
+		if (obj == null || getClass() != obj.getClass())
+			return false; // Khác kiểu thì không bằng
+
+		Vector2 other = (Vector2) obj;
 		return this.x == other.x && this.y == other.y;
 	}
+
 
 	/**
 	 * Tạo một bản sao của vector hiện tại.

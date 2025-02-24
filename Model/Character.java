@@ -13,6 +13,7 @@ public abstract class Character extends Entity {
 	public Character(int x, int y, int speed) {
 		super(x, y);
 		this.speed = speed;
+
 		collider = new BoxCollider();
 	}
 
@@ -21,7 +22,19 @@ public abstract class Character extends Entity {
 		position.y += dy * speed;
 	}
 
-	public void placeBomb() {}
+	public void placeBomb() {
+		if (GameManager.getInstance().isCharacterPlaceBomb(this) == false) {
+			Vector2 placePos = this.position.add(this.collider.offset).add(this.collider.size);
+			placePos.x -= this.collider.size.x / 2;
+			placePos.y -= this.collider.size.y / 4;
+
+			placePos.y = placePos.y / GS.Config.BLOCK_SIZE * GS.Config.BLOCK_SIZE;
+			placePos.x = placePos.x / GS.Config.BLOCK_SIZE * GS.Config.BLOCK_SIZE;
+
+			Bomb bomb = new Bomb(placePos);
+			GameManager.getInstance().addBomb(bomb, this);
+		}
+	}
 
 	public void die() {
 		// DO SOMETHING
@@ -29,15 +42,6 @@ public abstract class Character extends Entity {
 
 	public boolean isAlive() {
 		return heart != 0;
-	}
-
-	@Override
-	public void render(Graphics g) {
-		if (collider.canRender) {
-			Vector2 worldPos = position.add(collider.offset);
-			g.setColor(Color.GREEN);
-			g.drawRect(worldPos.x, worldPos.y, collider.size.x, collider.size.y);
-		}
 	}
 
 	public Vector2 getColliderOffset() {
@@ -51,4 +55,28 @@ public abstract class Character extends Entity {
 	public int getSpeed() {
 		return speed;
 	}
+
+	@Override
+	public void update() {}
+
+	@Override
+	public void render(Graphics g) {
+		if (collider.canRender) {
+			Vector2 worldPos = position.add(collider.offset);
+			g.setColor(Color.GREEN);
+			g.drawRect(worldPos.x, worldPos.y, collider.size.x, collider.size.y);
+		}
+
+		Vector2 placePos = this.position.add(this.collider.offset).add(this.collider.size);
+		placePos.x -= this.collider.size.x / 2;
+		placePos.y -= this.collider.size.y / 4;
+
+		placePos.y = placePos.y / GS.Config.BLOCK_SIZE * GS.Config.BLOCK_SIZE;
+		placePos.x = placePos.x / GS.Config.BLOCK_SIZE * GS.Config.BLOCK_SIZE;
+		g.setColor(Color.WHITE);
+		g.drawRect(placePos.x, placePos.y, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
+
+	}
+
+
 }

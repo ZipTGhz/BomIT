@@ -7,14 +7,14 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import Model.IGameSettings;
+import Model.GS;
 
 public class MenuPanel extends JPanel {
 	private Image background_image;
 
 	public MenuPanel() {
 		this.setPreferredSize(
-				new Dimension(IGameSettings.Config.GAME_WIDTH, IGameSettings.Config.GAME_HEIGHT));
+				new Dimension(GS.Config.GAME_WIDTH, GS.Config.GAME_HEIGHT));
 
 		initPanel();
 	}

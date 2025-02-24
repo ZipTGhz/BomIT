@@ -92,16 +92,20 @@ public class SpriteRenderer {
 	 * @param stateName Tên trạng thái cần thay đổi.
 	 * @return {@code true} nếu thay đổi thành công, {@code false} nếu trạng thái không tồn tại.
 	 */
-	public boolean changeState(String stateName) {
-		if (!states.containsKey(stateName)) {
-			return false;
-		}
-		if (currentState.equals(stateName)) {
-			return true;
+	public void changeState(String stateName) {
+		if (!states.containsKey(stateName) || currentState.equals(stateName)) {
+			return;
 		}
 		currentState = stateName;
 		spriteIndex = 0;
-		return true;
+	}
+
+	public void forceChangeState(String stateName) {
+		if (!states.containsKey(stateName)) {
+			return;
+		}
+		currentState = stateName;
+		spriteIndex = 0;
 	}
 
 	/**
@@ -116,7 +120,7 @@ public class SpriteRenderer {
 			g.drawImage(sprites.get(spriteIndex), worldPosition.x, worldPosition.y, null);
 
 			frameCount++;
-			if (frameCount == interval) {
+			if (frameCount >= interval) {
 				spriteIndex = (spriteIndex + 1) % sprites.size();
 				frameCount = 0;
 			}

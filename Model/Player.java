@@ -5,105 +5,101 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import Collections.Vector2;
 import Util.UtilityTools;
-import View.GamePanel;
-
 
 public class Player extends Character {
-	private GamePanel gp;
 
-	public Player(int x, int y, int speed, GamePanel gp) {
+	public Player(int x, int y, int speed) {
 		super(x, y, speed);
-		this.gp = gp;
 		this.heart = 3;
 		initPlayer();
 	}
 
 	private void initPlayer() {
 		collider.canRender = true;
-		collider.offset = new Vector2(43, 79);
-		collider.size = new Vector2(45, 40);
+		collider.offset = new Vector2(20, 25);
+		collider.size = new Vector2(40, 48);
 
-		spriteRenderer.setInterval(2);
+		sr.setInterval(2);
 
 		try {
-			spriteRenderer.addState(IHash.SpriteState.IDLE_DOWN);
+			sr.addState(IHash.CharacterState.IDLE_DOWN);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
 						.read(getClass().getResourceAsStream("/Resources/hero/idleA/hero_idleA_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, IGameSettings.Config.ENTITY_SIZE,
-						IGameSettings.Config.ENTITY_SIZE);
-				spriteRenderer.addSprite(IHash.SpriteState.IDLE_DOWN, idle);
+				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
+						GS.Config.ENTITY_SIZE);
+				sr.addSprite(IHash.CharacterState.IDLE_DOWN, idle);
 			}
 
-			spriteRenderer.addState(IHash.SpriteState.IDLE_RIGHT);
+			sr.addState(IHash.CharacterState.IDLE_RIGHT);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
 						.read(getClass().getResourceAsStream("/Resources/hero/idleB/hero_idleB_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, IGameSettings.Config.ENTITY_SIZE,
-						IGameSettings.Config.ENTITY_SIZE);
-				spriteRenderer.addSprite(IHash.SpriteState.IDLE_RIGHT, idle);
+				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
+						GS.Config.ENTITY_SIZE);
+				sr.addSprite(IHash.CharacterState.IDLE_RIGHT, idle);
 			}
 
-			spriteRenderer.addState(IHash.SpriteState.IDLE_UP);
+			sr.addState(IHash.CharacterState.IDLE_UP);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
 						.read(getClass().getResourceAsStream("/Resources/hero/idleC/hero_idleC_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, IGameSettings.Config.ENTITY_SIZE,
-						IGameSettings.Config.ENTITY_SIZE);
-				spriteRenderer.addSprite(IHash.SpriteState.IDLE_UP, idle);
+				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
+						GS.Config.ENTITY_SIZE);
+				sr.addSprite(IHash.CharacterState.IDLE_UP, idle);
 			}
 
-			spriteRenderer.addState(IHash.SpriteState.IDLE_LEFT);
+			sr.addState(IHash.CharacterState.IDLE_LEFT);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
 						.read(getClass().getResourceAsStream("/Resources/hero/idleD/hero_idleD_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, IGameSettings.Config.ENTITY_SIZE,
-						IGameSettings.Config.ENTITY_SIZE);
-				spriteRenderer.addSprite(IHash.SpriteState.IDLE_LEFT, idle);
+				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
+						GS.Config.ENTITY_SIZE);
+				sr.addSprite(IHash.CharacterState.IDLE_LEFT, idle);
 			}
 
-			spriteRenderer.addState(IHash.SpriteState.MOVE_DOWN);
+			sr.addState(IHash.CharacterState.MOVE_DOWN);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
 						.read(getClass().getResourceAsStream("/Resources/hero/walkA/hero_walkA_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, IGameSettings.Config.ENTITY_SIZE,
-						IGameSettings.Config.ENTITY_SIZE);
-				spriteRenderer.addSprite(IHash.SpriteState.MOVE_DOWN, idle);
+				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
+						GS.Config.ENTITY_SIZE);
+				sr.addSprite(IHash.CharacterState.MOVE_DOWN, idle);
 			}
 
-			spriteRenderer.addState(IHash.SpriteState.MOVE_RIGHT);
+			sr.addState(IHash.CharacterState.MOVE_RIGHT);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
 						.read(getClass().getResourceAsStream("/Resources/hero/walkB/hero_walkB_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, IGameSettings.Config.ENTITY_SIZE,
-						IGameSettings.Config.ENTITY_SIZE);
-				spriteRenderer.addSprite(IHash.SpriteState.MOVE_RIGHT, idle);
+				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
+						GS.Config.ENTITY_SIZE);
+				sr.addSprite(IHash.CharacterState.MOVE_RIGHT, idle);
 			}
 
-			spriteRenderer.addState(IHash.SpriteState.MOVE_UP);
+			sr.addState(IHash.CharacterState.MOVE_UP);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
 						.read(getClass().getResourceAsStream("/Resources/hero/walkC/hero_walkC_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, IGameSettings.Config.ENTITY_SIZE,
-						IGameSettings.Config.ENTITY_SIZE);
-				spriteRenderer.addSprite(IHash.SpriteState.MOVE_UP, idle);
+				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
+						GS.Config.ENTITY_SIZE);
+				sr.addSprite(IHash.CharacterState.MOVE_UP, idle);
 			}
 
-			spriteRenderer.addState(IHash.SpriteState.MOVE_LEFT);
+			sr.addState(IHash.CharacterState.MOVE_LEFT);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
 						.read(getClass().getResourceAsStream("/Resources/hero/walkD/hero_walkD_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, IGameSettings.Config.ENTITY_SIZE,
-						IGameSettings.Config.ENTITY_SIZE);
-				spriteRenderer.addSprite(IHash.SpriteState.MOVE_LEFT, idle);
+				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
+						GS.Config.ENTITY_SIZE);
+				sr.addSprite(IHash.CharacterState.MOVE_LEFT, idle);
 			}
 
 		} catch (Exception e) {
@@ -113,40 +109,45 @@ public class Player extends Character {
 
 	@Override
 	public void update() {
-		Vector2 curDir = gp.getPlayerController().getDirection();
+		super.update();
+		Vector2 curDir = GameManager.getInstance().getInput().getDirection();
 		if (curDir.x > 0) {
-			spriteRenderer.changeState(IHash.SpriteState.MOVE_RIGHT);
+			sr.changeState(IHash.CharacterState.MOVE_RIGHT);
 		} else if (curDir.x < 0) {
-			spriteRenderer.changeState(IHash.SpriteState.MOVE_LEFT);
+			sr.changeState(IHash.CharacterState.MOVE_LEFT);
 		} else if (curDir.y > 0) {
-			spriteRenderer.changeState(IHash.SpriteState.MOVE_DOWN);
+			sr.changeState(IHash.CharacterState.MOVE_DOWN);
 		} else if (curDir.y < 0) {
-			spriteRenderer.changeState(IHash.SpriteState.MOVE_UP);
+			sr.changeState(IHash.CharacterState.MOVE_UP);
 		} else {
-			Vector2 lastInput = gp.getPlayerController().getLastInput();
+			Vector2 lastInput = GameManager.getInstance().getInput().getLastInput();
 			if (lastInput.equals(Vector2.left())) {
-				spriteRenderer.changeState(IHash.SpriteState.IDLE_LEFT);
+				sr.changeState(IHash.CharacterState.IDLE_LEFT);
 			} else if (lastInput.equals(Vector2.right())) {
-				spriteRenderer.changeState(IHash.SpriteState.IDLE_RIGHT);
+				sr.changeState(IHash.CharacterState.IDLE_RIGHT);
 			} else if (lastInput.equals(Vector2.up())) {
-				spriteRenderer.changeState(IHash.SpriteState.IDLE_UP);
+				sr.changeState(IHash.CharacterState.IDLE_UP);
 			} else if (lastInput.equals(Vector2.down())) {
-				spriteRenderer.changeState(IHash.SpriteState.IDLE_DOWN);
+				sr.changeState(IHash.CharacterState.IDLE_DOWN);
 			} else {
-				spriteRenderer.changeState(IHash.SpriteState.IDLE_DOWN);
+				sr.changeState(IHash.CharacterState.IDLE_DOWN);
 			}
 		}
 
-		if (gp.getCollisionChecker().checkCollision(this, curDir)) {
-			return;
+		if (GameManager.getInstance().getInput().isSpacePressed()) {
+			this.placeBomb();
 		}
 
+		if (GameManager.getInstance().getCollisionChecker().checkCollision(this, curDir)) {
+			return;
+		}
 		this.move(curDir.x, curDir.y);
 	}
 
 	@Override
 	public void render(Graphics g) {
-		spriteRenderer.render(g, position);
+
+		sr.render(g, position);
 		super.render(g);
 	}
 

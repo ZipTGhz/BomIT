@@ -6,15 +6,16 @@ import Components.SpriteRenderer;
 
 public abstract class Entity {
 	protected Vector2 position;
-	protected SpriteRenderer spriteRenderer;
+	protected SpriteRenderer sr;
 
 	public Entity(int x, int y) {
 		position = new Vector2(x, y);
-		spriteRenderer = new SpriteRenderer();
+		sr = new SpriteRenderer();
 	}
 
 	public Entity(Vector2 position) {
-		this.position = position;
+		this.position = position.clone();
+		sr = new SpriteRenderer();
 	}
 
 	/**

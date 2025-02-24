@@ -1,9 +1,8 @@
 package Model;
 
 public interface IHash {
-    public interface SpriteState {
-        // Cho các khối
-        final String BLOCK = "BLOCK";
+    public interface CharacterState {
+
 
         // Cho nhân vật
         final String MOVE_LEFT = "MOVE_LEFT";
@@ -15,5 +14,16 @@ public interface IHash {
         final String IDLE_RIGHT = "IDLE_RIGHT";
         final String IDLE_UP = "IDLE_UP";
         final String IDLE_DOWN = "IDLE_DOWN";
+    }
+
+    public interface BoomState {
+        final String IDLE = "IDLE";
+        final String EXPLOSION = "EXPLOSION";
+    }
+
+    public interface BlockState {
+        // Cho các khối
+        final String IDLE = "IDLE";
+
     }
 }

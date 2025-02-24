@@ -13,6 +13,8 @@ public class PlayerController implements KeyListener {
 	private Vector2 _dirState = Vector2.zero();
 	private Vector2 _lastInput = Vector2.zero();
 
+	private boolean isSpacePressed = false;
+
 	@Override
 	public void keyTyped(KeyEvent e) {}
 
@@ -30,6 +32,8 @@ public class PlayerController implements KeyListener {
 			_lastInput = Vector2.left();
 		} else if (keyCode == KeyEvent.VK_D) {
 			_lastInput = Vector2.right();
+		} else if (keyCode == KeyEvent.VK_SPACE) {
+			isSpacePressed = true;
 		}
 	}
 
@@ -37,6 +41,10 @@ public class PlayerController implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		pressedKeys.remove(e.getKeyCode());
 		handleDirection();
+
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			isSpacePressed = false;
+		}
 	}
 
 	private void handleDirection() {
@@ -64,5 +72,9 @@ public class PlayerController implements KeyListener {
 
 	public Vector2 getLastInput() {
 		return _lastInput;
+	}
+
+	public boolean isSpacePressed() {
+		return isSpacePressed;
 	}
 }

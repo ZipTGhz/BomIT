@@ -27,15 +27,15 @@ public class TileMap {
 		try {
 			BufferedImage grassImage =
 					ImageIO.read(getClass().getResourceAsStream("/Resources/Grass.png"));
-			grassImage = UtilityTools.scaleImage(grassImage, IGameSettings.Config.BLOCK_SIZE,
-					IGameSettings.Config.BLOCK_SIZE);
+			grassImage = UtilityTools.scaleImage(grassImage, GS.Config.BLOCK_SIZE,
+					GS.Config.BLOCK_SIZE);
 			Tile grass = new Tile(false, false, grassImage);
 			tileSet.add(grass);
 
 			BufferedImage wallImage =
 					ImageIO.read(getClass().getResourceAsStream("/Resources/Wall.png"));
-			wallImage = UtilityTools.scaleImage(wallImage, IGameSettings.Config.BLOCK_SIZE,
-					IGameSettings.Config.BLOCK_SIZE);
+			wallImage = UtilityTools.scaleImage(wallImage, GS.Config.BLOCK_SIZE,
+					GS.Config.BLOCK_SIZE);
 			Tile wall = new Tile(false, true, wallImage);
 			tileSet.add(wall);
 

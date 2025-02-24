@@ -3,43 +3,27 @@ package View;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JPanel;
-import Controller.CollisionChecker;
-import Controller.PlayerController;
-import Model.Bot;
-import Model.IGameSettings;
-import Model.Player;
-import Model.TileMap;
+import Model.GameManager;
+import Model.GS;
 
-/*
- * Xử lý tất cả logic chơi game ở đây
- */
+
 public class GamePanel extends JPanel implements Runnable {
-	// Thành phần hệ thống
 	private Thread gameThread;
-	private CollisionChecker collisionChecker;
-	private PlayerController playerController;
-
-	// Người chơi, bot, bản đồ
-	private TileMap tileMap;
-	private Player player;
-	private Bot[] _bots;
 
 	public GamePanel() {
-		this.setPreferredSize(
-				new Dimension(IGameSettings.Config.GAME_WIDTH, IGameSettings.Config.GAME_HEIGHT));
-		this.setDoubleBuffered(true);
-		this.setFocusable(true);
-
+		config();
 		init();
 	}
 
-	private void init() {
-		tileMap = new TileMap();
+	private void config() {
+		this.setPreferredSize(
+				new Dimension(GS.Config.GAME_WIDTH, GS.Config.GAME_HEIGHT));
+		this.setDoubleBuffered(true);
+		this.setFocusable(true);
+	}
 
-		collisionChecker = new CollisionChecker(this);
-		playerController = new PlayerController();
-		player = new Player(240, 240, 2, this);
-		this.addKeyListener(playerController);
+	private void init() {
+		this.addKeyListener(GameManager.getInstance().getInput());
 	}
 
 	public void startGameThread() {
@@ -49,21 +33,9 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 	}
 
-	public TileMap getTileMap() {
-		return tileMap;
-	}
-
-	public PlayerController getPlayerController() {
-		return playerController;
-	}
-
-	public CollisionChecker getCollisionChecker() {
-		return collisionChecker;
-	}
-
 	@Override
 	public void run() {
-		double drawInterval = 1e9 / IGameSettings.Config.FPS;
+		double drawInterval = 1e9 / GS.Config.FPS;
 		long lastTime = System.nanoTime();
 		long currentTime;
 		double delta = 0;
@@ -73,12 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
 			delta += (currentTime - lastTime) / drawInterval;
 			lastTime = currentTime;
 			if (delta >= 1) {
-				// Nhận input và vẽ lại ở đây
-				player.update();
-				// for (Bot bot : _bots) {
-				// bot.update();
-				// }
-				tileMap.update();
+				GameManager.getInstance().update();
 				this.repaint();
 				--delta;
 			}
@@ -89,11 +56,8 @@ public class GamePanel extends JPanel implements Runnable {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		tileMap.render(g);
-		player.render(g);
-		// for (Bot bot : _bots) {
-		// bot.render(g);
-		// }
+		GameManager.getInstance().render(g);
 		g.dispose();
 	}
+
 }
