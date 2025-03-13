@@ -7,7 +7,6 @@ public interface GS {
 		final int FPS = 120;
 		final double DELTA_TIME = 1.0 / FPS;
 
-		final int ENTITY_SIZE = 80;
-		final int BLOCK_SIZE = 80;
+		final int BLOCK_SIZE = 48;
 	}
 }

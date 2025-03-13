@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import Collections.Vector2;
+import Controller.CollisionChecker;
 import Util.UtilityTools;
 
 public class Player extends Character {
@@ -16,8 +17,8 @@ public class Player extends Character {
 
 	private void initPlayer() {
 		collider.canRender = true;
-		collider.offset = new Vector2(20, 25);
-		collider.size = new Vector2(40, 48);
+		collider.offset = new Vector2(10, 17);
+		collider.size = new Vector2(29, 27);
 
 		sr.setInterval(2);
 
@@ -25,80 +26,80 @@ public class Player extends Character {
 			sr.addState(IHash.CharacterState.IDLE_DOWN);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
-						.read(getClass().getResourceAsStream("/Resources/hero/idleA/hero_idleA_00"
+						.read(getClass().getResourceAsStream("/Resources/Characters/Char 0/idleA/hero_idleA_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
-						GS.Config.ENTITY_SIZE);
+				idle = UtilityTools.scaleImage(idle, GS.Config.BLOCK_SIZE,
+						GS.Config.BLOCK_SIZE);
 				sr.addSprite(IHash.CharacterState.IDLE_DOWN, idle);
 			}
 
 			sr.addState(IHash.CharacterState.IDLE_RIGHT);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
-						.read(getClass().getResourceAsStream("/Resources/hero/idleB/hero_idleB_00"
+						.read(getClass().getResourceAsStream("/Resources/characters/char 0/idleB/hero_idleB_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
-						GS.Config.ENTITY_SIZE);
+				idle = UtilityTools.scaleImage(idle, GS.Config.BLOCK_SIZE,
+						GS.Config.BLOCK_SIZE);
 				sr.addSprite(IHash.CharacterState.IDLE_RIGHT, idle);
 			}
 
 			sr.addState(IHash.CharacterState.IDLE_UP);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
-						.read(getClass().getResourceAsStream("/Resources/hero/idleC/hero_idleC_00"
+						.read(getClass().getResourceAsStream("/Resources/characters/char 0/idleC/hero_idleC_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
-						GS.Config.ENTITY_SIZE);
+				idle = UtilityTools.scaleImage(idle, GS.Config.BLOCK_SIZE,
+						GS.Config.BLOCK_SIZE);
 				sr.addSprite(IHash.CharacterState.IDLE_UP, idle);
 			}
 
 			sr.addState(IHash.CharacterState.IDLE_LEFT);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
-						.read(getClass().getResourceAsStream("/Resources/hero/idleD/hero_idleD_00"
+						.read(getClass().getResourceAsStream("/Resources/characters/char 0/idleD/hero_idleD_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
-						GS.Config.ENTITY_SIZE);
+				idle = UtilityTools.scaleImage(idle, GS.Config.BLOCK_SIZE,
+						GS.Config.BLOCK_SIZE);
 				sr.addSprite(IHash.CharacterState.IDLE_LEFT, idle);
 			}
 
 			sr.addState(IHash.CharacterState.MOVE_DOWN);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
-						.read(getClass().getResourceAsStream("/Resources/hero/walkA/hero_walkA_00"
+						.read(getClass().getResourceAsStream("/Resources/characters/char 0/walkA/hero_walkA_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
-						GS.Config.ENTITY_SIZE);
+				idle = UtilityTools.scaleImage(idle, GS.Config.BLOCK_SIZE,
+						GS.Config.BLOCK_SIZE);
 				sr.addSprite(IHash.CharacterState.MOVE_DOWN, idle);
 			}
 
 			sr.addState(IHash.CharacterState.MOVE_RIGHT);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
-						.read(getClass().getResourceAsStream("/Resources/hero/walkB/hero_walkB_00"
+						.read(getClass().getResourceAsStream("/Resources/characters/char 0/walkB/hero_walkB_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
-						GS.Config.ENTITY_SIZE);
+				idle = UtilityTools.scaleImage(idle, GS.Config.BLOCK_SIZE,
+						GS.Config.BLOCK_SIZE);
 				sr.addSprite(IHash.CharacterState.MOVE_RIGHT, idle);
 			}
 
 			sr.addState(IHash.CharacterState.MOVE_UP);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
-						.read(getClass().getResourceAsStream("/Resources/hero/walkC/hero_walkC_00"
+						.read(getClass().getResourceAsStream("/Resources/characters/char 0/walkC/hero_walkC_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
-						GS.Config.ENTITY_SIZE);
+				idle = UtilityTools.scaleImage(idle, GS.Config.BLOCK_SIZE,
+						GS.Config.BLOCK_SIZE);
 				sr.addSprite(IHash.CharacterState.MOVE_UP, idle);
 			}
 
 			sr.addState(IHash.CharacterState.MOVE_LEFT);
 			for (int i = 0; i <= 16; ++i) {
 				BufferedImage idle = ImageIO
-						.read(getClass().getResourceAsStream("/Resources/hero/walkD/hero_walkD_00"
+						.read(getClass().getResourceAsStream("/Resources/characters/char 0/walkD/hero_walkD_00"
 								+ (i < 10 ? "0" : "") + String.valueOf(i) + ".png"));
-				idle = UtilityTools.scaleImage(idle, GS.Config.ENTITY_SIZE,
-						GS.Config.ENTITY_SIZE);
+				idle = UtilityTools.scaleImage(idle, GS.Config.BLOCK_SIZE,
+						GS.Config.BLOCK_SIZE);
 				sr.addSprite(IHash.CharacterState.MOVE_LEFT, idle);
 			}
 
@@ -138,7 +139,7 @@ public class Player extends Character {
 			this.placeBomb();
 		}
 
-		if (GameManager.getInstance().getCollisionChecker().checkCollision(this, curDir)) {
+		if (CollisionChecker.checkCharacterCollision(this, curDir)) {
 			return;
 		}
 		this.move(curDir.x, curDir.y);

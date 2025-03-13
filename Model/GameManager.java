@@ -2,7 +2,6 @@ package Model;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-import Controller.CollisionChecker;
 import Controller.PlayerController;
 
 /**
@@ -13,7 +12,6 @@ public class GameManager {
 
     // Hệ thống
     private PlayerController input;
-    private CollisionChecker collisionChecker;
 
     // Lưu tất cả các thứ cần thiết
     private TileMap tileMap;
@@ -24,10 +22,9 @@ public class GameManager {
 
     private GameManager() {
         input = new PlayerController();
-        collisionChecker = new CollisionChecker();
 
         tileMap = new TileMap();
-        player = new Player(240, 240, 2);
+        player = new Player(GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE, 1);
 
         // Không được xoá
         new Bomb(-999, -999);
@@ -42,10 +39,6 @@ public class GameManager {
 
     public PlayerController getInput() {
         return input;
-    }
-
-    public CollisionChecker getCollisionChecker() {
-        return collisionChecker;
     }
 
     public TileMap getTileMap() {

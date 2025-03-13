@@ -3,11 +3,12 @@ package Controller;
 import Collections.Vector2;
 import Model.Character;
 import Model.GameManager;
+import Model.Tile;
 import Model.GS;
 
 public class CollisionChecker {
 
-    public boolean checkCollision(Character character, Vector2 direction) {
+    public static boolean checkCharacterCollision(Character character, Vector2 direction) {
         // Toạ độ gốc của người chơi
         Vector2 topLeftPos = character.getWorldPosition().add(character.getColliderOffset());
         Vector2 bottomRight = topLeftPos.add(character.getColliderSize());
@@ -62,6 +63,38 @@ public class CollisionChecker {
                     || GameManager.getInstance().getTileMap().getTile(value2).getIsCollision();
         }
 
+        return false;
+    }
+
+    /** Kiểm tra xem khối tại vị trí đó có khả năng va chạm hay không
+     * @param position
+     * @return
+     */
+    public static boolean checkCollision(Vector2 position) {
+        int tileRow = position.y / GS.Config.BLOCK_SIZE;
+        int tileCol = position.x / GS.Config.BLOCK_SIZE;
+
+        int tileIndex = GameManager.getInstance().getTileMap().getTileIndex(tileRow, tileCol);
+        Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
+        return tile != null && tile.getIsCollision();
+
+    }
+
+    /** Kiểm tra xem khối tại vị trí đó có thể bị phá huỷ hay không
+     * @param position
+     * @return
+     */
+    public static boolean checkDestroy(Vector2 position) {
+        int tileRow = position.y / GS.Config.BLOCK_SIZE;
+        int tileCol = position.x / GS.Config.BLOCK_SIZE;
+
+        int tileIndex = GameManager.getInstance().getTileMap().getTileIndex(tileRow, tileCol);
+        Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
+        return tile != null && tile.getCanDestroy();
+
+    }
+
+    public static boolean checkDestroy(Vector2 position, Character[] characters) {
         return false;
     }
 }
