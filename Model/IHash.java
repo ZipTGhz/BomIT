@@ -2,8 +2,6 @@ package Model;
 
 public interface IHash {
     public interface CharacterState {
-
-
         // Cho nhân vật
         final String MOVE_LEFT = "MOVE_LEFT";
         final String MOVE_RIGHT = "MOVE_RIGHT";
@@ -24,6 +22,5 @@ public interface IHash {
     public interface BlockState {
         // Cho các khối
         final String IDLE = "IDLE";
-
     }
 }

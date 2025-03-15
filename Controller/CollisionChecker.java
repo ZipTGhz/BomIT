@@ -2,6 +2,7 @@ package Controller;
 
 import Collections.Vector2;
 import Model.Character;
+import Model.Entity;
 import Model.GameManager;
 import Model.Tile;
 import Model.GS;
@@ -66,7 +67,9 @@ public class CollisionChecker {
         return false;
     }
 
-    /** Kiểm tra xem khối tại vị trí đó có khả năng va chạm hay không
+    /**
+     * Kiểm tra xem khối tại vị trí đó có khả năng va chạm hay không
+     * 
      * @param position
      * @return
      */
@@ -80,7 +83,9 @@ public class CollisionChecker {
 
     }
 
-    /** Kiểm tra xem khối tại vị trí đó có thể bị phá huỷ hay không
+    /**
+     * Kiểm tra xem khối tại vị trí đó có thể bị phá huỷ hay không
+     * 
      * @param position
      * @return
      */
@@ -94,7 +99,9 @@ public class CollisionChecker {
 
     }
 
-    public static boolean checkDestroy(Vector2 position, Character[] characters) {
+    public static boolean checkDestroy(Vector2 position, Character[] characters) { return false; }
+
+    public static boolean checkEntityCollision(Entity e1, Vector2 direction, Entity e2) {
         return false;
     }
 }

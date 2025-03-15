@@ -70,11 +70,7 @@ public class PlayerController implements KeyListener {
 		return _dirState;
 	}
 
-	public Vector2 getLastInput() {
-		return _lastInput;
-	}
+	public Vector2 getLastInput() { return _lastInput; }
 
-	public boolean isSpacePressed() {
-		return isSpacePressed;
-	}
+	public boolean isSpacePressed() { return isSpacePressed; }
 }

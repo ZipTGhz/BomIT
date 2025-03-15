@@ -8,5 +8,6 @@ public interface GS {
 		final double DELTA_TIME = 1.0 / FPS;
 
 		final int BLOCK_SIZE = 48;
+		final double EPSILON = 1e-6;
 	}
 }

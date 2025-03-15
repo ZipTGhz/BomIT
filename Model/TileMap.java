@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
+
+import Collections.Vector2;
 import Util.UtilityTools;
 
 public class TileMap {
@@ -22,67 +25,6 @@ public class TileMap {
 
         String path = "/Resources/map.csv";
         loadMap(path);
-    }
-
-    private void loadTileSet() {
-        int subImageSize = 16;
-        boolean[][] tileConfig = {
-                { false, false },
-                { false, true },
-                { true, true },
-                { true, true },
-                { true, true },
-                { true, true },
-                { true, true },
-        };
-        try {
-            InputStream is = getClass().getResourceAsStream("/Resources/tileSet.png");
-            BufferedImage tileSets = ImageIO.read(is);
-            int tileIndex = 0;
-            for (int j = 0; j < tileSets.getHeight(); j += subImageSize) {
-                for (int i = 0; i < tileSets.getWidth(); i += subImageSize) {
-                    BufferedImage tileImage = tileSets.getSubimage(i, j, subImageSize, subImageSize);
-                    tileImage = UtilityTools.scaleImage(tileImage, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
-                    Tile tile = new Tile(tileConfig[tileIndex][0], tileConfig[tileIndex][1], tileImage);
-                    tileIndex += 1;
-                    tileSet.add(tile);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void loadMap(String path) {
-        try (InputStream is = getClass().getResourceAsStream(path);
-                BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-
-            if (is == null) { // Kiểm tra xem file có tồn tại không
-                throw new FileNotFoundException("File không tồn tại: " + path);
-            }
-
-            map.clear(); // Xóa dữ liệu cũ trước khi nạp map mới
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] words = line.split(",");
-
-                ArrayList<Integer> row = new ArrayList<>();
-                for (String w : words) {
-                    row.add(Integer.parseInt(w.trim()));
-                }
-
-                map.add(row);
-            }
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Lỗi: Không tìm thấy file " + path);
-        } catch (IOException e) {
-            System.err.println("Lỗi khi đọc file " + path);
-        } catch (NumberFormatException e) {
-            System.err.println("Lỗi: Dữ liệu trong file không phải số nguyên.");
-        }
     }
 
     public void update() {
@@ -122,7 +64,65 @@ public class TileMap {
         return null;
     }
 
-    public void deleteTile(int row, int col) {
-        map.get(row).set(col, 0);
+    public void deleteTile(int row, int col) { map.get(row).set(col, 0); }
+
+    public Vector2 getMapSize() {
+        int row = map.size();
+        int col = map.get(0).size();
+        return new Vector2(col, row);
+    }
+
+    private void loadTileSet() {
+        int subImageSize = 16;
+        boolean[][] tileConfig = { { false, false }, { false, true }, { true, true }, { true, true }, { true, true },
+                { true, true }, { true, true }, };
+        try {
+            InputStream is = getClass().getResourceAsStream("/Resources/tileSet.png");
+            BufferedImage tileSets = ImageIO.read(is);
+            int tileIndex = 0;
+            for (int j = 0; j < tileSets.getHeight(); j += subImageSize) {
+                for (int i = 0; i < tileSets.getWidth(); i += subImageSize) {
+                    BufferedImage tileImage = tileSets.getSubimage(i, j, subImageSize, subImageSize);
+                    tileImage = UtilityTools.scaleImage(tileImage, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
+                    Tile tile = new Tile(tileConfig[tileIndex][0], tileConfig[tileIndex][1], tileImage);
+                    tileIndex += 1;
+                    tileSet.add(tile);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void loadMap(String path) {
+        try (InputStream is = getClass().getResourceAsStream(path);
+                BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+
+            if (is == null) { // Kiểm tra xem file có tồn tại không
+                throw new FileNotFoundException("File không tồn tại: " + path);
+            }
+
+            map.clear();
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] words = line.split(",");
+
+                ArrayList<Integer> row = new ArrayList<>();
+                for (String w : words) {
+                    row.add(Integer.parseInt(w));
+                }
+
+                map.add(row);
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Lỗi: Không tìm thấy file " + path);
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc file " + path);
+        } catch (NumberFormatException e) {
+            System.err.println("Lỗi: Dữ liệu trong file không phải số nguyên.");
+        }
     }
 }

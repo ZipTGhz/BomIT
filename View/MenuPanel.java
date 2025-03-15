@@ -13,20 +13,19 @@ public class MenuPanel extends JPanel {
 	private Image background_image;
 
 	public MenuPanel() {
-		this.setPreferredSize(
-				new Dimension(GS.Config.GAME_WIDTH, GS.Config.GAME_HEIGHT));
+		this.setPreferredSize(new Dimension(GS.Config.GAME_WIDTH, GS.Config.GAME_HEIGHT));
 
 		initPanel();
-	}
-
-	private void initPanel() {
-		ImageIcon bg_icon = new ImageIcon(getClass().getResource("/Resources/background.png"));
-		background_image = bg_icon.getImage();
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(background_image, 0, 0, null);
+	}
+
+	private void initPanel() {
+		ImageIcon bg_icon = new ImageIcon(getClass().getResource("/Resources/background.png"));
+		background_image = bg_icon.getImage();
 	}
 }

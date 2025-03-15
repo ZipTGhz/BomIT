@@ -9,18 +9,17 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import Collections.Vector2;
-import Components.SpriteRenderer;
 import Controller.CollisionChecker;
 import Util.UtilityTools;
 
-public class Bomb {
+public class Bomb extends Entity {
     public static final int BOMB_TIME = 3000;
     public static final int EXPLOSION_TIME = 250;
 
     private static final Map<String, BufferedImage> bombSprites = new HashMap<>();
     private static final Map<String, BufferedImage> explosionSprites = new HashMap<>();
 
-    private ArrayList<Vector2> dmgZones = new ArrayList<>();
+    private static boolean staticInitDone = false;
 
     static {
         loadSprites();
@@ -46,42 +45,22 @@ public class Bomb {
         }
     }
 
-    private Vector2 position;
-    private SpriteRenderer spriteRenderer;
+    private ArrayList<Vector2> dmgZones = new ArrayList<>();
 
     private long bombStartTime;
     private boolean exploded = false;
     private boolean endAnimation = false;
 
     public Bomb(int x, int y) {
-        this.position = new Vector2(x, y);
-        spriteRenderer = new SpriteRenderer();
+        super(x, y);
         this.bombStartTime = System.currentTimeMillis();
         initBoom();
     }
 
     public Bomb(Vector2 position) {
-        this.position = position.clone();
-        spriteRenderer = new SpriteRenderer();
+        super(position);
         this.bombStartTime = System.currentTimeMillis();
         initBoom();
-    }
-
-    private void initBoom() {
-        spriteRenderer.addState(IHash.BoomState.IDLE);
-        spriteRenderer.addState(IHash.BoomState.EXPLOSION);
-        spriteRenderer.setInterval(16);
-
-        for (int i = 3; i <= 19; ++i) {
-            spriteRenderer.addSprite(IHash.BoomState.IDLE, bombSprites.get("bomb" + i));
-        }
-
-        for (int i = 2; i <= 18; ++i) {
-            spriteRenderer.addSprite(IHash.BoomState.EXPLOSION,
-                    explosionSprites.get("explosion" + i));
-        }
-
-        spriteRenderer.changeState(IHash.BoomState.IDLE);
     }
 
     public void update() {
@@ -97,10 +76,10 @@ public class Bomb {
 
     public void render(Graphics g) {
         if (!exploded) {
-            spriteRenderer.render(g, position);
+            sr.render(g, position);
         } else {
             for (Vector2 pos : dmgZones) {
-                spriteRenderer.render(g, pos);
+                sr.render(g, pos);
             }
         }
 
@@ -112,17 +91,62 @@ public class Bomb {
         exploded = true;
         bombStartTime = System.currentTimeMillis();
 
-        spriteRenderer.changeState(IHash.BoomState.EXPLOSION);
+        sr.changeState(IHash.BoomState.EXPLOSION);
 
+        Character[] characters = GameManager.getInstance().getAllCharacters();
+
+        for (Vector2 pos : dmgZones) {
+            int dmgRow = pos.y / GS.Config.BLOCK_SIZE, dmgCol = pos.x / GS.Config.BLOCK_SIZE;
+
+            if (CollisionChecker.checkDestroy(pos)) {
+                GameManager.getInstance().getTileMap().deleteTile(dmgRow, dmgCol);
+            }
+
+            Rectangle dmgZone = new Rectangle(pos.x, pos.y, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
+            for (Character character : characters) {
+                Vector2 worldPos = character.position.add(character.collider.offset);
+                Rectangle colliderRect = new Rectangle(worldPos.x, worldPos.y, character.collider.size.x,
+                        character.collider.size.y);
+                if (dmgZone.intersects(colliderRect)) {
+                    System.out.println("Aww!");
+                }
+            }
+        }
+    }
+
+    public boolean isEndAnimation() { return endAnimation; }
+
+    public ArrayList<Vector2> getExplodeZone() { return this.dmgZones; }
+
+    public Vector2 getPosition() { return position; }
+
+    private void initBoom() {
+        sr.addState(IHash.BoomState.IDLE);
+        sr.addState(IHash.BoomState.EXPLOSION);
+        sr.setInterval(16);
+
+        for (int i = 3; i <= 19; ++i) {
+            sr.addSprite(IHash.BoomState.IDLE, bombSprites.get("bomb" + i));
+        }
+
+        for (int i = 2; i <= 18; ++i) {
+            sr.addSprite(IHash.BoomState.EXPLOSION, explosionSprites.get("explosion" + i));
+        }
+
+        sr.changeState(IHash.BoomState.IDLE);
+
+        if (staticInitDone)
+            calculateExplodeZone();
+        staticInitDone = true;
+    }
+
+    private void calculateExplodeZone() {
         int blSz = GS.Config.BLOCK_SIZE;
-        Vector2[][] explodeZone = new Vector2[][] {
-                new Vector2[] { this.position, },
+        Vector2[][] explodeZone = new Vector2[][] { new Vector2[] { this.position, },
                 new Vector2[] { this.position.add(-blSz, 0), this.position.add(-2 * blSz, 0) },
                 new Vector2[] { this.position.add(blSz, 0), this.position.add(2 * blSz, 0) },
                 new Vector2[] { this.position.add(0, -blSz), this.position.add(0, -2 * blSz) },
-                new Vector2[] { this.position.add(0, blSz), this.position.add(0, 2 * blSz) }
-        };
-        Character[] characters = GameManager.getInstance().getAllCharacters();
+                new Vector2[] { this.position.add(0, blSz), this.position.add(0, 2 * blSz) } };
 
         dmgZones.clear();
 
@@ -138,28 +162,30 @@ public class Bomb {
                 }
             }
         }
+    }
 
-        for (Vector2 pos : dmgZones) {
-            int dmgRow = pos.y / GS.Config.BLOCK_SIZE, dmgCol = pos.x / GS.Config.BLOCK_SIZE;
+    public static ArrayList<Vector2> explodeZoneIfPlace(Vector2 position) {
+        int blSz = GS.Config.BLOCK_SIZE;
+        Vector2[][] explodeZone = new Vector2[][] { new Vector2[] { position, },
+                new Vector2[] { position.add(-blSz, 0), position.add(-2 * blSz, 0) },
+                new Vector2[] { position.add(blSz, 0), position.add(2 * blSz, 0) },
+                new Vector2[] { position.add(0, -blSz), position.add(0, -2 * blSz) },
+                new Vector2[] { position.add(0, blSz), position.add(0, 2 * blSz) } };
 
-            if (CollisionChecker.checkDestroy(pos)) {
-                GameManager.getInstance().getTileMap().deleteTile(dmgRow, dmgCol);
-            }
+        ArrayList<Vector2> res = new ArrayList<>();
 
-            Rectangle dmgZone = new Rectangle(pos.x, pos.y, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
-            for (Character character : characters) {
-                Vector2 worldPos = character.position.add(character.collider.offset);
-                Rectangle colliderRect = new Rectangle(worldPos.x, worldPos.y,
-                        character.collider.size.x, character.collider.size.y);
-                if (dmgZone.intersects(colliderRect)) {
-                    System.out.println("Aww!");
+        for (Vector2[] zone : explodeZone) {
+            for (Vector2 z : zone) {
+                if (!CollisionChecker.checkCollision(z)) {
+                    res.add(z);
+                } else {
+                    if (CollisionChecker.checkDestroy(z)) {
+                        res.add(z);
+                    }
+                    break;
                 }
             }
         }
+        return res;
     }
-
-    public boolean isEndAnimation() {
-        return endAnimation;
-    }
-
 }

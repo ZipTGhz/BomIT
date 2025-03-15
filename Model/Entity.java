@@ -1,6 +1,7 @@
 package Model;
 
 import java.awt.Graphics;
+
 import Collections.Vector2;
 import Components.SpriteRenderer;
 
@@ -20,15 +21,13 @@ public abstract class Entity {
 
 	/**
 	 * Trả về toạ độ thế giới của thực thể
+	 * 
 	 * @return
 	 */
-	public Vector2 getWorldPosition() {
-		return position;
-	}
+	public Vector2 getWorldPosition() { return position; }
 
 	public abstract void update();
 
 	public abstract void render(Graphics g);
-
 
 }

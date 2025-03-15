@@ -13,15 +13,9 @@ public class Tile {
         this.image = image;
     }
 
-    public boolean getCanDestroy() {
-        return canDestroy;
-    }
+    public boolean getCanDestroy() { return canDestroy; }
 
-    public boolean getIsCollision() {
-        return isCollision;
-    }
+    public boolean getIsCollision() { return isCollision; }
 
-    public BufferedImage getImage() {
-        return image;
-    }
+    public BufferedImage getImage() { return image; }
 }

@@ -2,10 +2,11 @@ package View;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import javax.swing.JPanel;
-import Model.GameManager;
-import Model.GS;
 
+import javax.swing.JPanel;
+
+import Model.GS;
+import Model.GameManager;
 
 public class GamePanel extends JPanel implements Runnable {
 	private Thread gameThread;
@@ -13,17 +14,6 @@ public class GamePanel extends JPanel implements Runnable {
 	public GamePanel() {
 		config();
 		init();
-	}
-
-	private void config() {
-		this.setPreferredSize(
-				new Dimension(GS.Config.GAME_WIDTH, GS.Config.GAME_HEIGHT));
-		this.setDoubleBuffered(true);
-		this.setFocusable(true);
-	}
-
-	private void init() {
-		this.addKeyListener(GameManager.getInstance().getInput());
 	}
 
 	public void startGameThread() {
@@ -59,5 +49,13 @@ public class GamePanel extends JPanel implements Runnable {
 		GameManager.getInstance().render(g);
 		g.dispose();
 	}
+
+	private void config() {
+		this.setPreferredSize(new Dimension(GS.Config.GAME_WIDTH, GS.Config.GAME_HEIGHT));
+		this.setDoubleBuffered(true);
+		this.setFocusable(true);
+	}
+
+	private void init() { this.addKeyListener(GameManager.getInstance().getInput()); }
 
 }
