@@ -192,4 +192,8 @@ public class Vector2 {
 
 		return res;
 	}
+
+	public Vector2 divide (int scale) {
+		return new Vector2(x / scale, y / scale);
+	}
 }

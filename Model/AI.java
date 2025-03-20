@@ -39,22 +39,19 @@ public class AI {
         // Trước hết ta nên kiểm tra xem AI có nằm trong vùng nổ bom không
         // Nếu có thì ta sẽ tìm đường đi tránh bom trước
         // Nếu không thì ta sẽ tìm đường đi bình thường
-        boolean[][] dangerZone = new boolean[mapSize.y][mapSize.x];
 
-        ArrayList<Bomb> bombs = GameManager.getInstance().getBombs();
-        for (Bomb bomb : bombs) {
-            // Thể hiện với AI rằng chỗ này là vật cản, không thể đi qua
-            // Vector2 bombPos = bomb.getPosition();
-            // seen[bombPos.y / GS.Config.BLOCK_SIZE][bombPos.x / GS.Config.BLOCK_SIZE] =
-            // true;
+        boolean[][] dangerZone = GameManager.getInstance().getDangerZone();
+        // boolean[][] dangerZone = new boolean[mapSize.y][mapSize.x];
 
-            ArrayList<Vector2> explodeZone = bomb.getExplodeZone();
-            for (Vector2 zone : explodeZone) {
-                int zoneRow = zone.y / GS.Config.BLOCK_SIZE;
-                int zoneCol = zone.x / GS.Config.BLOCK_SIZE;
-                dangerZone[zoneRow][zoneCol] = true;
-            }
-        }
+        // ArrayList<Bomb> bombs = GameManager.getInstance().getBombs();
+        // for (Bomb bomb : bombs) {
+        // ArrayList<Vector2> explodeZone = bomb.getExplodeZone();
+        // for (Vector2 zone : explodeZone) {
+        // int zoneRow = zone.y / GS.Config.BLOCK_SIZE;
+        // int zoneCol = zone.x / GS.Config.BLOCK_SIZE;
+        // dangerZone[zoneRow][zoneCol] = true;
+        // }
+        // }
 
         boolean isSafeZone = true;
         if (dangerZone[source.y][source.x]) {
@@ -151,5 +148,25 @@ public class AI {
         }
 
         return source;
+    }
+
+    public static boolean isInDangerZone(Vector2 pos) {
+        pos = pos.clone();
+        pos.x /= GS.Config.BLOCK_SIZE;
+        pos.y /= GS.Config.BLOCK_SIZE;
+
+        Vector2 mapSize = GameManager.getInstance().getTileMap().getMapSize();
+        boolean[][] dangerZone = new boolean[mapSize.y][mapSize.x];
+
+        ArrayList<Bomb> bombs = GameManager.getInstance().getBombs();
+        for (Bomb bomb : bombs) {
+            ArrayList<Vector2> explodeZone = bomb.getExplodeZone();
+            for (Vector2 zone : explodeZone) {
+                int zoneRow = zone.y / GS.Config.BLOCK_SIZE;
+                int zoneCol = zone.x / GS.Config.BLOCK_SIZE;
+                dangerZone[zoneRow][zoneCol] = true;
+            }
+        }
+        return dangerZone[pos.y][pos.x];
     }
 }

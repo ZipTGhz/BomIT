@@ -16,12 +16,13 @@ import Model.AI;
 import Model.GS;
 import Model.GameManager;
 import Model.IHash;
+import Model.Map.Tile;
 import Util.UtilityTools;
 
 public class Bot extends Character {
-	private static double INTERVAL = 0.5;
+	private static double INTERVAL = 0.75;
 	private int difficult;
-	private Random random = new Random();
+	private Random random = null;
 	private double lastTime = INTERVAL;
 
 	private ArrayList<Vector2> path = new ArrayList<>();
@@ -40,11 +41,16 @@ public class Bot extends Character {
 		// Độ khó ảnh hưởng đến mảng đường đi của bot
 		if (lastTime >= INTERVAL) {
 			lastTime -= INTERVAL;
-			if (this.difficult == 0) {
+			if (this.difficult == 0)
 				easyMode();
-			} else {
-				normalMode();
+			else
+				mediumMode();
+
+			for (Vector2 pos : path) {
+				System.out.print("(" + pos.x + ", " + pos.y + ") ");
 			}
+			if (path.size() != 0)
+				System.out.println();
 		}
 
 		// Dựa theo path đã tính ở trên
@@ -97,7 +103,8 @@ public class Bot extends Character {
 
 		this.move(curDir.x, curDir.y);
 
-		if (GameManager.getInstance().isCharacterPlaceBomb(this) == false && isPlayerInExplosionRange()) {
+		if (GameManager.getInstance().isCharacterPlaceBomb(this) == false
+				&& isPlayerInExplosionRange()) {
 			placeBomb();
 		}
 	}
@@ -112,6 +119,11 @@ public class Bot extends Character {
 	public void render(Graphics g) {
 		sr.render(g, position);
 		super.render(g);
+	}
+
+	@Override
+	public void die() {
+		GameManager.getInstance().deleteCharacter(this);
 	}
 
 	private void initBot() {
@@ -133,7 +145,8 @@ public class Bot extends Character {
 
 			for (int i = 0; i < files.length; ++i) {
 				BufferedImage idleImage = ImageIO.read(files[i]);
-				idleImage = UtilityTools.scaleImage(idleImage, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
+				idleImage = UtilityTools.scaleImage(idleImage, GS.Config.BLOCK_SIZE,
+						GS.Config.BLOCK_SIZE);
 				if (i < 4) {
 					sr.addSprite(IHash.CharacterState.IDLE_DOWN, idleImage);
 				} else if (i < 8) {
@@ -161,7 +174,8 @@ public class Bot extends Character {
 
 			for (int i = 0; i < files.length; ++i) {
 				BufferedImage walkImage = ImageIO.read(files[i]);
-				walkImage = UtilityTools.scaleImage(walkImage, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
+				walkImage = UtilityTools.scaleImage(walkImage, GS.Config.BLOCK_SIZE,
+						GS.Config.BLOCK_SIZE);
 				if (i < 4) {
 					sr.addSprite(IHash.CharacterState.MOVE_DOWN, walkImage);
 				} else if (i < 8) {
@@ -180,61 +194,75 @@ public class Bot extends Character {
 
 	private void easyMode() {
 		// Đổ random 4 hướng
+		if (random == null) {
+			random = new Random();
+			this.mediumMode();
+			return;
+		}
+
+		boolean[][] dangerZone = GameManager.getInstance().getDangerZone();
+
+		if (AI.isInDangerZone(this.position)) {
+			this.mediumMode();
+			return;
+		}
+
+		ArrayList<Vector2> possiblePath = new ArrayList<>();
+		Vector2 curTilePos = this.position.divide(GS.Config.BLOCK_SIZE);
+		int[][] dir = new int[][] { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 }, { 0, 0 } };
+		for (int[] d : dir) {
+			Vector2 nextPath = curTilePos.add(d[0], d[1]);
+			if (dangerZone[nextPath.y][nextPath.x])
+				continue;
+
+			int tileIndex = GameManager.getInstance().getTileMap().getTileIndex(nextPath.y,
+					nextPath.x);
+			Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
+			if (tile.getIsCollision() == false)
+				possiblePath.add(nextPath);
+		}
+
+		pathIdx = 0;
+		path.clear();
+		if (possiblePath.size() != 0) {
+			int randInt = random.nextInt(possiblePath.size());
+			path.add(possiblePath.get(randInt));
+		} else {
+			path.add(curTilePos);
+		}
 	}
 
-	private void normalMode() {
+	private void mediumMode() {
 		// Chạy thuật toán tìm đường
-		Character[] characters = GameManager.getInstance().getAllCharacters();
-		Character player = characters[0];
-
-		Vector2 topLeftBot = this.position.add(collider.offset);
-		// Vector2 centerBot = topLeftBot.add(new Vector2(collider.size.x / 2,
-		// collider.size.y / 2));
-		// Vector2 rightBottomBot = topLeftBot.add(collider.size);
-
+		Character player = GameManager.getInstance().getAllCharacters()[0];
 		Vector2 centerPlayer = player.position.add(player.getColliderOffset());
 		centerPlayer.x += player.collider.size.x / 2;
 		centerPlayer.y += player.collider.size.y / 2;
 
-		// ArrayList<Vector2> path1 = AI.calculateMove(topLeftBot, centerPlayer);
-		// ArrayList<Vector2> path2 = AI.calculateMove(rightBottomBot, centerPlayer);
-		// if (path1.size() < path2.size()) {
-		// path = path2;
-		// } else {
-		// path = path1;
-		// }
+		Vector2 topLeftBot = this.position.add(collider.offset);
+
 		path = AI.calculateMove(topLeftBot, centerPlayer);
 		pathIdx = 0;
-		for (Vector2 pos : path) {
-			System.out.print("(" + pos.x + ", " + pos.y + ") ");
-		}
-		if (path.size() != 0)
-			System.out.println();
-
 	}
 
 	private boolean isPlayerInExplosionRange() {
 		Character[] characters = GameManager.getInstance().getAllCharacters();
 		Character player = characters[0];
 		Vector2 topLeftPlayer = player.position.add(player.collider.offset);
-		Rectangle playerRect = new Rectangle(topLeftPlayer.x, topLeftPlayer.y, player.collider.size.x,
-				player.collider.size.y);
+		Rectangle playerRect = new Rectangle(topLeftPlayer.x, topLeftPlayer.y,
+				player.collider.size.x, player.collider.size.y);
 
 		Vector2 placePos = this.getPlacePostion();
 
 		ArrayList<Vector2> explodeZone = Bomb.explodeZoneIfPlace(placePos);
 		for (Vector2 zone : explodeZone) {
-			Rectangle zoneRect = new Rectangle(zone.x, zone.y, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
+			Rectangle zoneRect = new Rectangle(zone.x, zone.y, GS.Config.BLOCK_SIZE,
+					GS.Config.BLOCK_SIZE);
 			if (zoneRect.intersects(playerRect)) {
 				return true;
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public void die() {
-		GameManager.getInstance().deleteCharacter(this);
 	}
 
 }

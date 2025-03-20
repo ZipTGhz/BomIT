@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.imageio.ImageIO;
+
 import Collections.Vector2;
 import Controller.CollisionChecker;
 import Model.GS;
@@ -26,6 +28,31 @@ public class Bomb extends Entity {
 
     static {
         loadSprites();
+    }
+
+    public static ArrayList<Vector2> explodeZoneIfPlace(Vector2 position) {
+        int blSz = GS.Config.BLOCK_SIZE;
+        Vector2[][] explodeZone = new Vector2[][] { new Vector2[] { position, },
+                new Vector2[] { position.add(-blSz, 0), position.add(-2 * blSz, 0) },
+                new Vector2[] { position.add(blSz, 0), position.add(2 * blSz, 0) },
+                new Vector2[] { position.add(0, -blSz), position.add(0, -2 * blSz) },
+                new Vector2[] { position.add(0, blSz), position.add(0, 2 * blSz) } };
+
+        ArrayList<Vector2> res = new ArrayList<>();
+
+        for (Vector2[] zone : explodeZone) {
+            for (Vector2 z : zone) {
+                if (!CollisionChecker.checkCollision(z)) {
+                    res.add(z);
+                } else {
+                    if (CollisionChecker.checkDestroy(z)) {
+                        res.add(z);
+                    }
+                    break;
+                }
+            }
+        }
+        return res;
     }
 
     private static void loadSprites() {
@@ -49,9 +76,9 @@ public class Bomb extends Entity {
     }
 
     private ArrayList<Vector2> dmgZones = new ArrayList<>();
-
     private double bombStartTime = 0;
     private boolean exploded = false;
+
     private boolean endAnimation = false;
 
     public Bomb(int x, int y) {
@@ -103,11 +130,12 @@ public class Bomb extends Entity {
                 GameManager.getInstance().getTileMap().deleteTile(dmgRow, dmgCol);
             }
 
-            Rectangle dmgZone = new Rectangle(pos.x, pos.y, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
+            Rectangle dmgZone = new Rectangle(pos.x, pos.y, GS.Config.BLOCK_SIZE,
+                    GS.Config.BLOCK_SIZE);
             for (Character character : characters) {
                 Vector2 worldPos = character.position.add(character.collider.offset);
-                Rectangle colliderRect = new Rectangle(worldPos.x, worldPos.y, character.collider.size.x,
-                        character.collider.size.y);
+                Rectangle colliderRect = new Rectangle(worldPos.x, worldPos.y,
+                        character.collider.size.x, character.collider.size.y);
                 if (dmgZone.intersects(colliderRect)) {
                     System.out.println("Aww!");
                     character.die();
@@ -170,30 +198,5 @@ public class Bomb extends Entity {
                 }
             }
         }
-    }
-
-    public static ArrayList<Vector2> explodeZoneIfPlace(Vector2 position) {
-        int blSz = GS.Config.BLOCK_SIZE;
-        Vector2[][] explodeZone = new Vector2[][] { new Vector2[] { position, },
-                new Vector2[] { position.add(-blSz, 0), position.add(-2 * blSz, 0) },
-                new Vector2[] { position.add(blSz, 0), position.add(2 * blSz, 0) },
-                new Vector2[] { position.add(0, -blSz), position.add(0, -2 * blSz) },
-                new Vector2[] { position.add(0, blSz), position.add(0, 2 * blSz) } };
-
-        ArrayList<Vector2> res = new ArrayList<>();
-
-        for (Vector2[] zone : explodeZone) {
-            for (Vector2 z : zone) {
-                if (!CollisionChecker.checkCollision(z)) {
-                    res.add(z);
-                } else {
-                    if (CollisionChecker.checkDestroy(z)) {
-                        res.add(z);
-                    }
-                    break;
-                }
-            }
-        }
-        return res;
     }
 }

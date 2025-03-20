@@ -36,7 +36,7 @@ public class GameManager {
     private GameManager() {
         tileMap = new TileMap();
 
-        setGameSetting(3, 1);
+        setGameSetting(1, 0);
         // player = new Player(4 * GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE, 1);
         // bots.add(new Bot(1 * GS.Config.BLOCK_SIZE,2 * GS.Config.BLOCK_SIZE, 1, 1));
 
@@ -46,7 +46,8 @@ public class GameManager {
 
     public void setGameSetting(int botNum, int botDiff) {
         player = new Player(GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE, 1);
-        Vector2[] botLocations = new Vector2[] { new Vector2(15 * GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE),
+        Vector2[] botLocations = new Vector2[] {
+                new Vector2(15 * GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE),
                 new Vector2(GS.Config.BLOCK_SIZE, 13 * GS.Config.BLOCK_SIZE),
                 new Vector2(15 * GS.Config.BLOCK_SIZE, 13 * GS.Config.BLOCK_SIZE) };
 
@@ -126,4 +127,19 @@ public class GameManager {
     }
 
     private void checkWin() {}
+
+    public boolean[][] getDangerZone() {
+        Vector2 mapSize = tileMap.getMapSize();
+        boolean[][] dangerZone = new boolean[mapSize.y][mapSize.x];
+
+        for (Bomb bomb : bombs) {
+            ArrayList<Vector2> explodeZone = bomb.getExplodeZone();
+            for (Vector2 zone : explodeZone) {
+                int zoneRow = zone.y / GS.Config.BLOCK_SIZE;
+                int zoneCol = zone.x / GS.Config.BLOCK_SIZE;
+                dangerZone[zoneRow][zoneCol] = true;
+            }
+        }
+        return dangerZone;
+    }
 }
