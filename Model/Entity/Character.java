@@ -1,10 +1,12 @@
-package Model;
+package Model.Entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 import Collections.Vector2;
 import Components.BoxCollider;
+import Model.GS;
+import Model.GameManager;
 
 public abstract class Character extends Entity {
 	protected int speed;
@@ -31,9 +33,7 @@ public abstract class Character extends Entity {
 		}
 	}
 
-	public void die() {
-		// DO SOMETHING
-	}
+	public abstract void die();
 
 	public boolean isAlive() { return heart != 0; }
 

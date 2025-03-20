@@ -3,7 +3,12 @@ package Model;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import Controller.PlayerController;
+import Collections.Vector2;
+import Model.Entity.Bomb;
+import Model.Entity.Bot;
+import Model.Entity.Character;
+import Model.Entity.Player;
+import Model.Map.TileMap;
 
 /**
  * Xử lý tất cả logic chơi game ở đây
@@ -19,7 +24,7 @@ public class GameManager {
     }
 
     // Hệ thống
-    private PlayerController input;
+    // private PlayerController input;
     // Lưu tất cả các thứ cần thiết
     private TileMap tileMap;
     private Player player;
@@ -29,21 +34,30 @@ public class GameManager {
     private ArrayList<Character> characters = new ArrayList<>();
 
     private GameManager() {
-        input = new PlayerController();
-
         tileMap = new TileMap();
-        // player = new Player(GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE, 1);
-        // bots.add(new Bot(15 * GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE, 1, 1));
 
-        player = new Player(4 * GS.Config.BLOCK_SIZE, 1 * GS.Config.BLOCK_SIZE, 1);
-        bots.add(new Bot(1 * GS.Config.BLOCK_SIZE, 2 * GS.Config.BLOCK_SIZE, 1, 1));
+        setGameSetting(1, 1);
+        // player = new Player(4 * GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE, 1);
+        // bots.add(new Bot(1 * GS.Config.BLOCK_SIZE,2 * GS.Config.BLOCK_SIZE, 1, 1));
+
         // Không được xoá
         new Bomb(-999, -999);
     }
 
-    public PlayerController getInput() { return input; }
+    public void setGameSetting(int botNum, int botDiff) {
+        player = new Player(GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE, 1);
+        Vector2[] botLocations = new Vector2[] { new Vector2(15 * GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE),
+                new Vector2(GS.Config.BLOCK_SIZE, 13 * GS.Config.BLOCK_SIZE),
+                new Vector2(15 * GS.Config.BLOCK_SIZE, 13 * GS.Config.BLOCK_SIZE) };
 
-    public TileMap getTileMap() { return tileMap; }
+        bots.clear();
+        for (int i = 0; i < botNum; ++i)
+            bots.add(new Bot(botLocations[i].x, botLocations[i].y, 1, botDiff));
+    }
+
+    public TileMap getTileMap() {
+        return tileMap;
+    }
 
     public Character[] getAllCharacters() {
         if (bots != null) {
@@ -91,8 +105,25 @@ public class GameManager {
         player.render(g);
     }
 
-    public boolean isCharacterPlaceBomb(Character character) { return characters.contains(character); }
+    public boolean isCharacterPlaceBomb(Character character) {
+        return characters.contains(character);
+    }
 
-    public ArrayList<Bomb> getBombs() { return bombs; }
+    public ArrayList<Bomb> getBombs() {
+        return bombs;
+    }
 
+    public boolean deleteCharacter(Character character) {
+        if (player.equals(character)) {
+            checkWin();
+            return true;
+        } else if (bots.contains(character)) {
+            checkWin();
+            bots.remove(character);
+            return true;
+        }
+        return false;
+    }
+
+    private void checkWin() {}
 }

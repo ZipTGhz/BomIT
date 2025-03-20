@@ -1,10 +1,12 @@
 package Controller;
 
+import java.awt.Rectangle;
+
 import Collections.Vector2;
-import Model.Character;
-import Model.Entity;
 import Model.GameManager;
-import Model.Tile;
+import Model.Entity.Bomb;
+import Model.Entity.Character;
+import Model.Map.Tile;
 import Model.GS;
 
 public class CollisionChecker {
@@ -101,7 +103,22 @@ public class CollisionChecker {
 
     public static boolean checkDestroy(Vector2 position, Character[] characters) { return false; }
 
-    public static boolean checkEntityCollision(Entity e1, Vector2 direction, Entity e2) {
+    public static boolean checkBombCollision(Character c, Vector2 direction, Bomb bomb) {
+        // Kiểm tra xem đối tượng e1 có nằm trong đối tượng e2 không
+        // Nếu có thì trả về false
+        // Sẽ cho phép đối tượng di chuyển ra ngoài như bom trước khi kiểm tra va chạm
+        Vector2 topLeftE1 = c.getWorldPosition().add(c.getColliderOffset());
+        Rectangle e1Rect = new Rectangle(topLeftE1.x, topLeftE1.y, c.getColliderSize().x, c.getColliderSize().y);
+        Vector2 topLeftBomb = bomb.getWorldPosition();
+        Rectangle bombRect = new Rectangle(topLeftBomb.x, topLeftBomb.y, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
+        if (e1Rect.intersects(bombRect)) {
+            return false;
+        }
+
+        e1Rect.translate(direction.x, direction.y);
+        if (e1Rect.intersects(bombRect)) {
+            return true;
+        }
         return false;
     }
 }

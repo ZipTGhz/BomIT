@@ -23,4 +23,9 @@ public interface IHash {
         // Cho các khối
         final String IDLE = "IDLE";
     }
+
+    public interface InputDirection {
+        final String HORIZONTAL = "Horizontal";
+        final String VERTICAL = "Vertical";
+    }
 }

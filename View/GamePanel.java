@@ -9,14 +9,19 @@ import Model.GS;
 import Model.GameManager;
 
 public class GamePanel extends JPanel implements Runnable {
+	private static boolean paused = false;
+
+	public static void setPausedGame(boolean paused) {
+		GamePanel.paused = paused;
+	}
+
 	private Thread gameThread;
 
 	public GamePanel() {
 		config();
-		init();
 	}
 
-	public void startGameThread() {
+	public void start() {
 		if (gameThread == null) {
 			gameThread = new Thread(this);
 			gameThread.start();
@@ -31,6 +36,8 @@ public class GamePanel extends JPanel implements Runnable {
 		double delta = 0;
 
 		while (gameThread != null) {
+			if (paused)
+				break;
 			currentTime = System.nanoTime();
 			delta += (currentTime - lastTime) / drawInterval;
 			lastTime = currentTime;
@@ -53,9 +60,6 @@ public class GamePanel extends JPanel implements Runnable {
 	private void config() {
 		this.setPreferredSize(new Dimension(GS.Config.GAME_WIDTH, GS.Config.GAME_HEIGHT));
 		this.setDoubleBuffered(true);
-		this.setFocusable(true);
 	}
-
-	private void init() { this.addKeyListener(GameManager.getInstance().getInput()); }
 
 }

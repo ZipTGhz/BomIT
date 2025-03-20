@@ -5,6 +5,8 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Controller.Input;
+
 public class GameFrame extends JFrame {
 	private CardLayout _cardLayout;
 	private JPanel _cardPanel;
@@ -17,10 +19,10 @@ public class GameFrame extends JFrame {
 		initComponent();
 		initUI();
 		this.add(_cardPanel);
+		this.addKeyListener(new Input());
 	}
 
 	public void start() {
-
 		playGame();
 		pack();
 		this.setLocationRelativeTo(null);
@@ -34,7 +36,7 @@ public class GameFrame extends JFrame {
 
 	public void playGame() {
 		_cardLayout.show(_cardPanel, "gp");
-		_gp.startGameThread();
+		_gp.start();
 		_gp.requestFocusInWindow();
 	}
 

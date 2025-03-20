@@ -1,4 +1,4 @@
-package Model;
+package Model.Entity;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -10,11 +10,14 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import Collections.Vector2;
 import Controller.CollisionChecker;
+import Model.GS;
+import Model.GameManager;
+import Model.IHash;
 import Util.UtilityTools;
 
 public class Bomb extends Entity {
-    public static final int BOMB_TIME = 3000;
-    public static final int EXPLOSION_TIME = 250;
+    public static final double BOMB_TIME = 3;
+    public static final double EXPLOSION_TIME = 0.25;
 
     private static final Map<String, BufferedImage> bombSprites = new HashMap<>();
     private static final Map<String, BufferedImage> explosionSprites = new HashMap<>();
@@ -47,29 +50,27 @@ public class Bomb extends Entity {
 
     private ArrayList<Vector2> dmgZones = new ArrayList<>();
 
-    private long bombStartTime;
+    private double bombStartTime = 0;
     private boolean exploded = false;
     private boolean endAnimation = false;
 
     public Bomb(int x, int y) {
         super(x, y);
-        this.bombStartTime = System.currentTimeMillis();
         initBoom();
     }
 
     public Bomb(Vector2 position) {
         super(position);
-        this.bombStartTime = System.currentTimeMillis();
         initBoom();
     }
 
     public void update() {
-        long curTime = System.currentTimeMillis();
-        if (!exploded && curTime - bombStartTime >= BOMB_TIME) {
+        bombStartTime += GS.Config.DELTA_TIME;
+        if (!exploded && bombStartTime >= BOMB_TIME) {
             explode();
         }
 
-        if (exploded && curTime - bombStartTime >= EXPLOSION_TIME) {
+        if (exploded && bombStartTime >= EXPLOSION_TIME) {
             endAnimation = true;
         }
     }
@@ -89,7 +90,7 @@ public class Bomb extends Entity {
         if (exploded)
             return;
         exploded = true;
-        bombStartTime = System.currentTimeMillis();
+        bombStartTime = 0;
 
         sr.changeState(IHash.BoomState.EXPLOSION);
 
@@ -109,16 +110,23 @@ public class Bomb extends Entity {
                         character.collider.size.y);
                 if (dmgZone.intersects(colliderRect)) {
                     System.out.println("Aww!");
+                    character.die();
                 }
             }
         }
     }
 
-    public boolean isEndAnimation() { return endAnimation; }
+    public boolean isEndAnimation() {
+        return endAnimation;
+    }
 
-    public ArrayList<Vector2> getExplodeZone() { return this.dmgZones; }
+    public ArrayList<Vector2> getExplodeZone() {
+        return this.dmgZones;
+    }
 
-    public Vector2 getPosition() { return position; }
+    public Vector2 getPosition() {
+        return position;
+    }
 
     private void initBoom() {
         sr.addState(IHash.BoomState.IDLE);

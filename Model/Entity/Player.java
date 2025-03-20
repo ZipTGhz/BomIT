@@ -1,12 +1,18 @@
-package Model;
+package Model.Entity;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 import Collections.Vector2;
 import Controller.CollisionChecker;
+import Controller.Input;
+import Model.GS;
+import Model.GameManager;
+import Model.IHash;
 import Util.UtilityTools;
 
 public class Player extends Character {
@@ -20,7 +26,62 @@ public class Player extends Character {
 	@Override
 	public void update() {
 		super.update();
-		Vector2 curDir = GameManager.getInstance().getInput().getDirection();
+		Vector2 curDir = handleMovement();
+
+		if (Input.GetKey(KeyEvent.VK_SPACE))
+			this.placeBomb();
+
+		if (handleCollision(curDir))
+			return;
+
+		this.move(curDir.x, curDir.y);
+	}
+
+	@Override
+	public void render(Graphics g) {
+		sr.render(g, position);
+		super.render(g);
+	}
+
+	@Override
+	public void die() {
+		return;
+	}
+
+	private boolean handleCollision(Vector2 curDir) {
+		if (CollisionChecker.checkCharacterCollision(this, curDir))
+			return true;
+
+		ArrayList<Bomb> bombs = GameManager.getInstance().getBombs();
+		for (Bomb bomb : bombs) {
+			if (CollisionChecker.checkBombCollision(this, curDir, bomb))
+				return true;
+		}
+		return false;
+	}
+
+	private Vector2 handleMovement() {
+		int x = Input.GetAxisRaw(IHash.InputDirection.HORIZONTAL);
+		int y = Input.GetAxisRaw(IHash.InputDirection.VERTICAL);
+		if (x != 0 && y != 0) {
+			int keyCode = Input.getLastKeyPressed();
+			x = y = 0;
+			switch (keyCode) {
+			case KeyEvent.VK_S:
+				y = 1;
+				break;
+			case KeyEvent.VK_A:
+				x = -1;
+				break;
+			case KeyEvent.VK_D:
+				x = 1;
+				break;
+			case KeyEvent.VK_W:
+				y = -1;
+				break;
+			}
+		}
+		Vector2 curDir = new Vector2(x, y);
 		if (curDir.x > 0) {
 			sr.changeState(IHash.CharacterState.MOVE_RIGHT);
 		} else if (curDir.x < 0) {
@@ -30,35 +91,23 @@ public class Player extends Character {
 		} else if (curDir.y < 0) {
 			sr.changeState(IHash.CharacterState.MOVE_UP);
 		} else {
-			Vector2 lastInput = GameManager.getInstance().getInput().getLastInput();
-			if (lastInput.equals(Vector2.left())) {
+			int keyCode = Input.getLastKeyPressed();
+			switch (keyCode) {
+			case KeyEvent.VK_S:
+				sr.changeState(IHash.CharacterState.IDLE_DOWN);
+				break;
+			case KeyEvent.VK_A:
 				sr.changeState(IHash.CharacterState.IDLE_LEFT);
-			} else if (lastInput.equals(Vector2.right())) {
+				break;
+			case KeyEvent.VK_D:
 				sr.changeState(IHash.CharacterState.IDLE_RIGHT);
-			} else if (lastInput.equals(Vector2.up())) {
+				break;
+			case KeyEvent.VK_W:
 				sr.changeState(IHash.CharacterState.IDLE_UP);
-			} else if (lastInput.equals(Vector2.down())) {
-				sr.changeState(IHash.CharacterState.IDLE_DOWN);
-			} else {
-				sr.changeState(IHash.CharacterState.IDLE_DOWN);
+				break;
 			}
 		}
-
-		if (GameManager.getInstance().getInput().isSpacePressed()) {
-			this.placeBomb();
-		}
-
-		if (CollisionChecker.checkCharacterCollision(this, curDir)) {
-			return;
-		}
-		this.move(curDir.x, curDir.y);
-	}
-
-	@Override
-	public void render(Graphics g) {
-
-		sr.render(g, position);
-		super.render(g);
+		return curDir;
 	}
 
 	private void initPlayer() {
@@ -144,6 +193,7 @@ public class Player extends Character {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		sr.changeState(IHash.CharacterState.IDLE_DOWN);
 	}
 
 }

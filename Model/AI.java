@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import Collections.Vector2;
+import Model.Entity.Bomb;
+import Model.Map.Tile;
 
 public class AI {
     /**
@@ -42,8 +44,9 @@ public class AI {
         ArrayList<Bomb> bombs = GameManager.getInstance().getBombs();
         for (Bomb bomb : bombs) {
             // Thể hiện với AI rằng chỗ này là vật cản, không thể đi qua
-            Vector2 bombPos = bomb.getPosition();
-            seen[bombPos.y / GS.Config.BLOCK_SIZE][bombPos.x / GS.Config.BLOCK_SIZE] = true;
+            // Vector2 bombPos = bomb.getPosition();
+            // seen[bombPos.y / GS.Config.BLOCK_SIZE][bombPos.x / GS.Config.BLOCK_SIZE] =
+            // true;
 
             ArrayList<Vector2> explodeZone = bomb.getExplodeZone();
             for (Vector2 zone : explodeZone) {
@@ -68,7 +71,8 @@ public class AI {
         HashMap<Vector2, Vector2> mp = new HashMap<>();
 
         // 4 hướng di chuyển
-        Vector2[] dir = new Vector2[] { Vector2.down(), Vector2.left(), Vector2.right(), Vector2.up() };
+        Vector2[] dir = new Vector2[] { Vector2.down(), Vector2.left(), Vector2.right(),
+                Vector2.up() };
 
         Vector2 bestPoint = source;
         double minDist = Vector2.distance(source, dist);
@@ -89,7 +93,8 @@ public class AI {
                 Vector2 next = cur.add(d);
                 if (next.x >= 0 && next.x < seen[0].length && next.y >= 0 && next.y < seen.length
                         && seen[next.y][next.x] == false
-                        && (isSafeZone && dangerZone[next.y][next.x] == false || isSafeZone == false)) {
+                        && (isSafeZone && dangerZone[next.y][next.x] == false
+                                || isSafeZone == false)) {
                     int index = GameManager.getInstance().getTileMap().getTileIndex(next.y, next.x);
                     Tile tile = GameManager.getInstance().getTileMap().getTile(index);
                     if (tile.getIsCollision() == false) {
@@ -106,7 +111,8 @@ public class AI {
             tracePath.add(bestPoint.clone());
             bestPoint = mp.get(bestPoint);
         }
-        tracePath.add(source);
+        if (tracePath.size() == 0)
+            tracePath.add(source);
 
         Collections.reverse(tracePath);
 
@@ -121,7 +127,8 @@ public class AI {
         q.add(source);
         seen[source.y][source.x] = true;
 
-        Vector2[] dir = new Vector2[] { Vector2.down(), Vector2.left(), Vector2.right(), Vector2.up() };
+        Vector2[] dir = new Vector2[] { Vector2.down(), Vector2.left(), Vector2.right(),
+                Vector2.up() };
 
         while (q.size() != 0) {
             Vector2 cur = q.remove();

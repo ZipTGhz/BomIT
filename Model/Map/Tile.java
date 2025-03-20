@@ -1,4 +1,4 @@
-package Model;
+package Model.Map;
 
 import java.awt.image.BufferedImage;
 

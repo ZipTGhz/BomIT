@@ -1,4 +1,4 @@
-package Model;
+package Model.Map;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import Collections.Vector2;
+import Model.GS;
 import Util.UtilityTools;
 
 public class TileMap {
@@ -27,9 +28,7 @@ public class TileMap {
         loadMap(path);
     }
 
-    public void update() {
-
-    }
+    public void update() {}
 
     public void render(Graphics g) {
         int width = GS.Config.BLOCK_SIZE;
@@ -64,7 +63,9 @@ public class TileMap {
         return null;
     }
 
-    public void deleteTile(int row, int col) { map.get(row).set(col, 0); }
+    public void deleteTile(int row, int col) {
+        map.get(row).set(col, 0);
+    }
 
     public Vector2 getMapSize() {
         int row = map.size();
@@ -74,17 +75,20 @@ public class TileMap {
 
     private void loadTileSet() {
         int subImageSize = 16;
-        boolean[][] tileConfig = { { false, false }, { false, true }, { true, true }, { true, true }, { true, true },
-                { true, true }, { true, true }, };
+        boolean[][] tileConfig = { { false, false }, { false, true }, { true, true },
+                { true, true }, { true, true }, { true, true }, { true, true }, };
         try {
             InputStream is = getClass().getResourceAsStream("/Resources/tileSet.png");
             BufferedImage tileSets = ImageIO.read(is);
             int tileIndex = 0;
             for (int j = 0; j < tileSets.getHeight(); j += subImageSize) {
                 for (int i = 0; i < tileSets.getWidth(); i += subImageSize) {
-                    BufferedImage tileImage = tileSets.getSubimage(i, j, subImageSize, subImageSize);
-                    tileImage = UtilityTools.scaleImage(tileImage, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
-                    Tile tile = new Tile(tileConfig[tileIndex][0], tileConfig[tileIndex][1], tileImage);
+                    BufferedImage tileImage = tileSets.getSubimage(i, j, subImageSize,
+                            subImageSize);
+                    tileImage = UtilityTools.scaleImage(tileImage, GS.Config.BLOCK_SIZE,
+                            GS.Config.BLOCK_SIZE);
+                    Tile tile = new Tile(tileConfig[tileIndex][0], tileConfig[tileIndex][1],
+                            tileImage);
                     tileIndex += 1;
                     tileSet.add(tile);
                 }

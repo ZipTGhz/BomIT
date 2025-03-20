@@ -1,4 +1,4 @@
-package Model;
+package Model.Entity;
 
 import java.awt.Graphics;
 
