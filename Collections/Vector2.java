@@ -160,20 +160,34 @@ public class Vector2 {
 	public static Vector2 align(Vector2 current, Vector2 next) {
 		Vector2 res = null;
 		double minDist = Double.MAX_VALUE;
+
 		for (int x = -GS.Config.BLOCK_SIZE; x <= GS.Config.BLOCK_SIZE; x += GS.Config.BLOCK_SIZE) {
-			for (int y = -GS.Config.BLOCK_SIZE; y <= GS.Config.BLOCK_SIZE; y += GS.Config.BLOCK_SIZE) {
-				Vector2 tmp = new Vector2(next.x + x, next.y + y);
-				int tileIndex = GameManager.getInstance().getTileMap()
-						.getTileIndex(tmp.y / GS.Config.BLOCK_SIZE, tmp.x / GS.Config.BLOCK_SIZE);
-				Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
-				if (tile.getIsCollision() == false) {
-					double curDist = Vector2.distance(current, next);
-					if (curDist < minDist) {
-						minDist = curDist;
-						res = tmp;
-					}
+			Vector2 tmp = new Vector2(next.x + x, next.y);
+			int tileIndex = GameManager.getInstance().getTileMap()
+					.getTileIndex(tmp.y / GS.Config.BLOCK_SIZE, tmp.x / GS.Config.BLOCK_SIZE);
+			Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
+			if (tile.getIsCollision() == false) {
+				double curDist = Vector2.distance(current, tmp);
+				if (curDist < minDist) {
+					minDist = curDist;
+					res = tmp;
 				}
 			}
+		}
+
+		for (int y = -GS.Config.BLOCK_SIZE; y <= GS.Config.BLOCK_SIZE; y += GS.Config.BLOCK_SIZE) {
+			Vector2 tmp = new Vector2(next.x, next.y + y);
+			int tileIndex = GameManager.getInstance().getTileMap()
+					.getTileIndex(tmp.y / GS.Config.BLOCK_SIZE, tmp.x / GS.Config.BLOCK_SIZE);
+			Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
+			if (tile.getIsCollision() == false) {
+				double curDist = Vector2.distance(current, tmp);
+				if (curDist < minDist) {
+					minDist = curDist;
+					res = tmp;
+				}
+			}
+
 		}
 
 		return res;

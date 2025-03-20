@@ -36,7 +36,7 @@ public class GameManager {
     private GameManager() {
         tileMap = new TileMap();
 
-        setGameSetting(1, 1);
+        setGameSetting(3, 1);
         // player = new Player(4 * GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE, 1);
         // bots.add(new Bot(1 * GS.Config.BLOCK_SIZE,2 * GS.Config.BLOCK_SIZE, 1, 1));
 
