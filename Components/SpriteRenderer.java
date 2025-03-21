@@ -45,32 +45,23 @@ public class SpriteRenderer {
 	}
 
 	/**
-	 * Thêm trạng thái mới vào trình hoạt ảnh. Nếu trạng thái đã tồn tại thì trả về
-	 * {@code false}, ngược lại trả về {@code true}.
-	 *
-	 * @param stateName Tên trạng thái cần thêm.
-	 * @return {@code true} nếu thêm thành công, {@code false} nếu trạng thái đã tồn
-	 *         tại.
-	 */
-	public boolean addState(String stateName) {
-		if (states.containsKey(stateName)) {
-			return false;
-		}
-		states.put(stateName, new ArrayList<>());
-		return true;
-	}
-
-	/**
 	 * Thêm một sprite vào trạng thái cụ thể.
 	 *
 	 * @param stateName Tên của trạng thái cần thêm sprite.
 	 * @param sprite    Ảnh cần thêm vào danh sách sprite của trạng thái.
 	 */
 	public void addSprite(String stateName, BufferedImage sprite) {
-		ArrayList<BufferedImage> stateSprites = states.get(stateName);
-		if (stateSprites != null) {
-			stateSprites.add(sprite);
-		}
+		states.computeIfAbsent(stateName, _ -> new ArrayList<>()).add(sprite);
+	}
+
+	/**
+	 * Thêm nhiều sprite vào trạng thái cụ thể.
+	 *
+	 * @param stateName Tên của trạng thái cần thêm sprite.
+	 * @param sprites   Các ảnh cần thêm vào danh sách sprite của trạng thái.
+	 */
+	public void addSprite(String stateName, ArrayList<BufferedImage> sprites) {
+		states.computeIfAbsent(stateName, _ -> new ArrayList<>()).addAll(sprites);
 	}
 
 	/**
@@ -78,14 +69,18 @@ public class SpriteRenderer {
 	 *
 	 * @param interval Số frame cần đợi trước khi chuyển sang sprite tiếp theo.
 	 */
-	public void setInterval(int interval) { this.interval = interval; }
+	public void setInterval(int interval) {
+		this.interval = interval;
+	}
 
 	/**
 	 * Lấy giá trị khoảng thời gian nghỉ giữa các frame.
 	 *
 	 * @return Giá trị khoảng thời gian nghỉ.
 	 */
-	public int getInterval() { return interval; }
+	public int getInterval() {
+		return interval;
+	}
 
 	/**
 	 * Thay đổi trạng thái hiện tại của sprite renderer.

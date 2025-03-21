@@ -5,7 +5,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.Set;
-import Model.IHash;
+
+import Interfaces.IHash;
 
 public class Input implements KeyListener {
 	private static Set<Integer> pressedKeys = new HashSet<>();

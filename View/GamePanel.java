@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import Model.GS;
+import Interfaces.IGS;
 import Model.GameManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	@Override
 	public void run() {
-		double drawInterval = 1e9 / GS.Config.FPS;
+		double drawInterval = 1e9 / IGS.FPS;
 		long lastTime = System.nanoTime();
 		long currentTime;
 		double delta = 0;
@@ -58,7 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	private void config() {
-		this.setPreferredSize(new Dimension(GS.Config.GAME_WIDTH, GS.Config.GAME_HEIGHT));
+		this.setPreferredSize(new Dimension(IGS.GAME_WIDTH, IGS.GAME_HEIGHT));
 		this.setDoubleBuffered(true);
 	}
 

@@ -2,6 +2,7 @@ package Util;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class UtilityTools {
 	public static BufferedImage scaleImage(BufferedImage original, int width, int height) {
@@ -14,5 +15,46 @@ public class UtilityTools {
 		// Giải phóng tài nguyên sau khi xong, tránh rò rỉ bộ nhớ
 		g2d.dispose();
 		return scaled;
+	}
+
+	public static BufferedImage[] scaleImage(BufferedImage[] images, int width, int height) {
+		BufferedImage[] res = new BufferedImage[images.length];
+
+		for (int i = 0; i < images.length; ++i) {
+			BufferedImage original = images[i];
+			// Tạo một ảnh rỗng với kích thước người dùng mong muốn
+			BufferedImage scaled = new BufferedImage(width, height, original.getType());
+			// Lấy đồ hoạ của ảnh để vẽ lên ảnh rỗng đó
+			Graphics2D g2d = scaled.createGraphics();
+			// Vẽ ảnh gốc lên scaled với kích thước mong muốn
+			g2d.drawImage(original, 0, 0, width, height, null);
+			// Giải phóng tài nguyên sau khi xong, tránh rò rỉ bộ nhớ
+			g2d.dispose();
+			res[i] = scaled;
+		}
+
+		return res;
+	}
+
+	public static BufferedImage[] splitImage(BufferedImage original, int size) {
+		int width = original.getWidth(), height = original.getHeight();
+
+		BufferedImage[] res = new BufferedImage[width / size * height / size];
+		int index = 0;
+
+		for (int y = 0; y < height; y += size) {
+			for (int x = 0; x < width; x += size) {
+				BufferedImage subImage = original.getSubimage(x, y, size, size);
+				res[index++] = subImage;
+			}
+		}
+
+		return res;
+	}
+
+	public static <T> T[] mergeArrays(T[] arr1, T[] arr2) {
+		T[] merged = Arrays.copyOf(arr1, arr1.length + arr2.length);
+		System.arraycopy(arr2, 0, merged, arr1.length, arr2.length);
+		return merged;
 	}
 }

@@ -3,11 +3,11 @@ package Controller;
 import java.awt.Rectangle;
 
 import Collections.Vector2;
+import Interfaces.IGS;
 import Model.GameManager;
 import Model.Entity.Bomb;
 import Model.Entity.Character;
 import Model.Map.Tile;
-import Model.GS;
 
 public class CollisionChecker {
 
@@ -25,9 +25,9 @@ public class CollisionChecker {
 
         // Kiểm tra 4 hướng xem có va chạm với khối chặn đường nào không.
         if (direction.equals(Vector2.left())) {
-            int row1 = topLeftPos.y / GS.Config.BLOCK_SIZE;
-            int row2 = bottomRight.y / GS.Config.BLOCK_SIZE;
-            int col = topLeftPos.x / GS.Config.BLOCK_SIZE;
+            int row1 = topLeftPos.y / IGS.BLOCK_SIZE;
+            int row2 = bottomRight.y / IGS.BLOCK_SIZE;
+            int col = topLeftPos.x / IGS.BLOCK_SIZE;
 
             int value1 = GameManager.getInstance().getTileMap().getTileIndex(row1, col);
             int value2 = GameManager.getInstance().getTileMap().getTileIndex(row2, col);
@@ -35,9 +35,9 @@ public class CollisionChecker {
             return GameManager.getInstance().getTileMap().getTile(value1).getIsCollision()
                     || GameManager.getInstance().getTileMap().getTile(value2).getIsCollision();
         } else if (direction.equals(Vector2.right())) {
-            int row1 = topLeftPos.y / GS.Config.BLOCK_SIZE;
-            int row2 = bottomRight.y / GS.Config.BLOCK_SIZE;
-            int col = bottomRight.x / GS.Config.BLOCK_SIZE;
+            int row1 = topLeftPos.y / IGS.BLOCK_SIZE;
+            int row2 = bottomRight.y / IGS.BLOCK_SIZE;
+            int col = bottomRight.x / IGS.BLOCK_SIZE;
 
             int value1 = GameManager.getInstance().getTileMap().getTileIndex(row1, col);
             int value2 = GameManager.getInstance().getTileMap().getTileIndex(row2, col);
@@ -45,9 +45,9 @@ public class CollisionChecker {
             return GameManager.getInstance().getTileMap().getTile(value1).getIsCollision()
                     || GameManager.getInstance().getTileMap().getTile(value2).getIsCollision();
         } else if (direction.equals(Vector2.up())) {
-            int row = topLeftPos.y / GS.Config.BLOCK_SIZE;
-            int col1 = topLeftPos.x / GS.Config.BLOCK_SIZE;
-            int col2 = bottomRight.x / GS.Config.BLOCK_SIZE;
+            int row = topLeftPos.y / IGS.BLOCK_SIZE;
+            int col1 = topLeftPos.x / IGS.BLOCK_SIZE;
+            int col2 = bottomRight.x / IGS.BLOCK_SIZE;
 
             int value1 = GameManager.getInstance().getTileMap().getTileIndex(row, col1);
             int value2 = GameManager.getInstance().getTileMap().getTileIndex(row, col2);
@@ -55,9 +55,9 @@ public class CollisionChecker {
             return GameManager.getInstance().getTileMap().getTile(value1).getIsCollision()
                     || GameManager.getInstance().getTileMap().getTile(value2).getIsCollision();
         } else if (direction.equals(Vector2.down())) {
-            int row = bottomRight.y / GS.Config.BLOCK_SIZE;
-            int col1 = topLeftPos.x / GS.Config.BLOCK_SIZE;
-            int col2 = bottomRight.x / GS.Config.BLOCK_SIZE;
+            int row = bottomRight.y / IGS.BLOCK_SIZE;
+            int col1 = topLeftPos.x / IGS.BLOCK_SIZE;
+            int col2 = bottomRight.x / IGS.BLOCK_SIZE;
 
             int value1 = GameManager.getInstance().getTileMap().getTileIndex(row, col1);
             int value2 = GameManager.getInstance().getTileMap().getTileIndex(row, col2);
@@ -76,8 +76,8 @@ public class CollisionChecker {
      * @return
      */
     public static boolean checkCollision(Vector2 position) {
-        int tileRow = position.y / GS.Config.BLOCK_SIZE;
-        int tileCol = position.x / GS.Config.BLOCK_SIZE;
+        int tileRow = position.y / IGS.BLOCK_SIZE;
+        int tileCol = position.x / IGS.BLOCK_SIZE;
 
         int tileIndex = GameManager.getInstance().getTileMap().getTileIndex(tileRow, tileCol);
         Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
@@ -92,8 +92,8 @@ public class CollisionChecker {
      * @return
      */
     public static boolean checkDestroy(Vector2 position) {
-        int tileRow = position.y / GS.Config.BLOCK_SIZE;
-        int tileCol = position.x / GS.Config.BLOCK_SIZE;
+        int tileRow = position.y / IGS.BLOCK_SIZE;
+        int tileCol = position.x / IGS.BLOCK_SIZE;
 
         int tileIndex = GameManager.getInstance().getTileMap().getTileIndex(tileRow, tileCol);
         Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
@@ -110,7 +110,7 @@ public class CollisionChecker {
         Vector2 topLeftE1 = c.getWorldPosition().add(c.getColliderOffset());
         Rectangle e1Rect = new Rectangle(topLeftE1.x, topLeftE1.y, c.getColliderSize().x, c.getColliderSize().y);
         Vector2 topLeftBomb = bomb.getWorldPosition();
-        Rectangle bombRect = new Rectangle(topLeftBomb.x, topLeftBomb.y, GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE);
+        Rectangle bombRect = new Rectangle(topLeftBomb.x, topLeftBomb.y, IGS.BLOCK_SIZE, IGS.BLOCK_SIZE);
         if (e1Rect.intersects(bombRect)) {
             return false;
         }

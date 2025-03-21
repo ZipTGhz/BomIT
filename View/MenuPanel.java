@@ -7,13 +7,13 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import Model.GS;
+import Interfaces.IGS;
 
 public class MenuPanel extends JPanel {
 	private Image background_image;
 
 	public MenuPanel() {
-		this.setPreferredSize(new Dimension(GS.Config.GAME_WIDTH, GS.Config.GAME_HEIGHT));
+		this.setPreferredSize(new Dimension(IGS.GAME_WIDTH, IGS.GAME_HEIGHT));
 
 		initPanel();
 	}

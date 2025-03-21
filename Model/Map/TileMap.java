@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import Collections.Vector2;
-import Model.GS;
+import Interfaces.IGS;
 import Util.UtilityTools;
 
 public class TileMap {
@@ -31,7 +31,7 @@ public class TileMap {
     public void update() {}
 
     public void render(Graphics g) {
-        int width = GS.Config.BLOCK_SIZE;
+        int width = IGS.BLOCK_SIZE;
         int m = map.size(), n = map.get(0).size();
         // Vẽ nền cỏ trước
         for (int i = 0; i < m; ++i) {
@@ -85,8 +85,8 @@ public class TileMap {
                 for (int i = 0; i < tileSets.getWidth(); i += subImageSize) {
                     BufferedImage tileImage = tileSets.getSubimage(i, j, subImageSize,
                             subImageSize);
-                    tileImage = UtilityTools.scaleImage(tileImage, GS.Config.BLOCK_SIZE,
-                            GS.Config.BLOCK_SIZE);
+                    tileImage = UtilityTools.scaleImage(tileImage, IGS.BLOCK_SIZE,
+                            IGS.BLOCK_SIZE);
                     Tile tile = new Tile(tileConfig[tileIndex][0], tileConfig[tileIndex][1],
                             tileImage);
                     tileIndex += 1;

@@ -4,6 +4,8 @@ import java.awt.Graphics;
 
 import Collections.Vector2;
 import Components.SpriteRenderer;
+import Model.ImageCategory;
+import Model.SpriteFactory;
 
 public abstract class Entity {
 	protected Vector2 position;
@@ -19,15 +21,23 @@ public abstract class Entity {
 		sr = new SpriteRenderer();
 	}
 
-	/**
-	 * Trả về toạ độ thế giới của thực thể
-	 * 
-	 * @return
-	 */
-	public Vector2 getWorldPosition() { return position; }
+	public Vector2 getWorldPosition() {
+		return position;
+	}
 
 	public abstract void update();
 
 	public abstract void render(Graphics g);
+
+	protected void loadSprites(String spriteName, String[] stateNames) {
+		ImageCategory category = null;
+		if (spriteName != null)
+			category = SpriteFactory.getInstance().getImageCategory(spriteName);
+		else
+			category = SpriteFactory.getInstance().getRandCharImg();
+
+		for (String state : stateNames)
+			sr.addSprite(state, category.getImages(state));
+	}
 
 }

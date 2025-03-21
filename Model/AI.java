@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import Collections.Vector2;
+import Interfaces.IGS;
 import Model.Entity.Bomb;
 import Model.Map.Tile;
 
@@ -24,12 +25,12 @@ public class AI {
     public static ArrayList<Vector2> calculateMove(Vector2 source, Vector2 dist) {
         // Thuật toán BFS cơ bản
         source = source.clone();
-        source.x /= GS.Config.BLOCK_SIZE;
-        source.y /= GS.Config.BLOCK_SIZE;
+        source.x /= IGS.BLOCK_SIZE;
+        source.y /= IGS.BLOCK_SIZE;
 
         dist = dist.clone();
-        dist.x /= GS.Config.BLOCK_SIZE;
-        dist.y /= GS.Config.BLOCK_SIZE;
+        dist.x /= IGS.BLOCK_SIZE;
+        dist.y /= IGS.BLOCK_SIZE;
 
         // Mảng đánh dấu
         // Kiểm tra xem toạ độ đó đã được xét hay chưa
@@ -152,8 +153,8 @@ public class AI {
 
     public static boolean isInDangerZone(Vector2 pos) {
         pos = pos.clone();
-        pos.x /= GS.Config.BLOCK_SIZE;
-        pos.y /= GS.Config.BLOCK_SIZE;
+        pos.x /= IGS.BLOCK_SIZE;
+        pos.y /= IGS.BLOCK_SIZE;
 
         Vector2 mapSize = GameManager.getInstance().getTileMap().getMapSize();
         boolean[][] dangerZone = new boolean[mapSize.y][mapSize.x];
@@ -162,8 +163,8 @@ public class AI {
         for (Bomb bomb : bombs) {
             ArrayList<Vector2> explodeZone = bomb.getExplodeZone();
             for (Vector2 zone : explodeZone) {
-                int zoneRow = zone.y / GS.Config.BLOCK_SIZE;
-                int zoneCol = zone.x / GS.Config.BLOCK_SIZE;
+                int zoneRow = zone.y / IGS.BLOCK_SIZE;
+                int zoneCol = zone.x / IGS.BLOCK_SIZE;
                 dangerZone[zoneRow][zoneCol] = true;
             }
         }

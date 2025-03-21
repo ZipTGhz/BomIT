@@ -1,6 +1,6 @@
 package Collections;
 
-import Model.GS;
+import Interfaces.IGS;
 import Model.GameManager;
 import Model.Map.Tile;
 
@@ -161,10 +161,10 @@ public class Vector2 {
 		Vector2 res = null;
 		double minDist = Double.MAX_VALUE;
 
-		for (int x = -GS.Config.BLOCK_SIZE; x <= GS.Config.BLOCK_SIZE; x += GS.Config.BLOCK_SIZE) {
+		for (int x = -IGS.BLOCK_SIZE; x <= IGS.BLOCK_SIZE; x += IGS.BLOCK_SIZE) {
 			Vector2 tmp = new Vector2(next.x + x, next.y);
 			int tileIndex = GameManager.getInstance().getTileMap()
-					.getTileIndex(tmp.y / GS.Config.BLOCK_SIZE, tmp.x / GS.Config.BLOCK_SIZE);
+					.getTileIndex(tmp.y / IGS.BLOCK_SIZE, tmp.x / IGS.BLOCK_SIZE);
 			Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
 			if (tile.getIsCollision() == false) {
 				double curDist = Vector2.distance(current, tmp);
@@ -175,10 +175,10 @@ public class Vector2 {
 			}
 		}
 
-		for (int y = -GS.Config.BLOCK_SIZE; y <= GS.Config.BLOCK_SIZE; y += GS.Config.BLOCK_SIZE) {
+		for (int y = -IGS.BLOCK_SIZE; y <= IGS.BLOCK_SIZE; y += IGS.BLOCK_SIZE) {
 			Vector2 tmp = new Vector2(next.x, next.y + y);
 			int tileIndex = GameManager.getInstance().getTileMap()
-					.getTileIndex(tmp.y / GS.Config.BLOCK_SIZE, tmp.x / GS.Config.BLOCK_SIZE);
+					.getTileIndex(tmp.y / IGS.BLOCK_SIZE, tmp.x / IGS.BLOCK_SIZE);
 			Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
 			if (tile.getIsCollision() == false) {
 				double curDist = Vector2.distance(current, tmp);
