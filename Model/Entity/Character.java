@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import Collections.Vector2;
-import Components.BoxCollider;
+import Components.Back.BoxCollider;
 import Interfaces.IDamageable;
 import Interfaces.IGS;
 import Interfaces.IHash;
@@ -32,6 +32,10 @@ public abstract class Character extends Entity implements IDamageable {
 		this.speed = speed;
 		collider = new BoxCollider();
 		initCharacter();
+	}
+
+	public int getHealth() {
+		return health;
 	}
 
 	public void move(int dx, int dy) {
@@ -111,10 +115,6 @@ public abstract class Character extends Entity implements IDamageable {
 		sr.changeState(IHash.CharacterState.IDLE_DOWN);
 	}
 
-	private void die() {
-		GameManager.getInstance().deleteCharacter(this);
-	}
-
 	protected Vector2 getPlacePostion() {
 		Vector2 placePos = this.position.add(this.collider.offset).add(this.collider.size);
 		placePos.x -= this.collider.size.x / 2;
@@ -125,4 +125,9 @@ public abstract class Character extends Entity implements IDamageable {
 
 		return placePos;
 	}
+
+	private void die() {
+		GameManager.getInstance().deleteCharacter(this);
+	}
+
 }

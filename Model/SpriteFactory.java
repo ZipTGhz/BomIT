@@ -22,16 +22,19 @@ public class SpriteFactory {
         return instance;
     }
 
-    private HashMap<String, ImageCategory> mp = new HashMap<>();
+    private HashMap<String, ImageCategory> categories = new HashMap<>();
     private ArrayList<ImageCategory> factory;
     private Random random;
 
+    private HashMap<String, BufferedImage> singleSprite = new HashMap<>();
+
     private SpriteFactory() {
         loadSprites();
+        loadSprite();
     }
 
     public ImageCategory getImageCategory(String key) {
-        return mp.getOrDefault(key, null);
+        return categories.getOrDefault(key, null);
     }
 
     public ImageCategory getRandCharImg() {
@@ -42,20 +45,43 @@ public class SpriteFactory {
         return target;
     }
 
-    public void reset() {
+    public void resetRandCharImg() {
         if (factory == null)
             factory = new ArrayList<>();
         factory.clear();
         for (int i = 1; i <= 6; ++i) {
             String key = "Char" + String.valueOf(i);
-            factory.add(mp.get(key));
+            factory.add(categories.get(key));
+        }
+    }
+
+    public BufferedImage getSprite(String key) {
+        return singleSprite.getOrDefault(key, null);
+    }
+
+    private void loadSprite() {
+        try {
+            URL url = getClass().getResource("/Resources/Others");
+            File folder = new File(url.toURI());
+            File[] files = folder.listFiles((_, name) -> name.endsWith(".png"));
+            for (File file : files) {
+                BufferedImage image = ImageIO.read(file);
+                image = UtilityTools.scaleImage(image, 16, 16);
+                String fileName = file.getName().toUpperCase();
+                if (fileName.startsWith(IHash.SpriteName.HEART))
+                    singleSprite.put(IHash.SpriteName.HEART, image);
+                else
+                    singleSprite.put(IHash.SpriteName.SPEED, image);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void loadSprites() {
         loadBomb();
         loadChars();
-        reset();
+        resetRandCharImg();
     }
 
     private void loadBomb() {
@@ -66,15 +92,19 @@ public class SpriteFactory {
             File[] files = folder.listFiles((FilenameFilter) (_, name) -> name.endsWith(".png"));
             for (File file : files) {
                 BufferedImage image = UtilityTools.scaleImage(ImageIO.read(file), IGS.BLOCK_SIZE, IGS.BLOCK_SIZE);
-                if (file.getName().startsWith("bomb"))
+                if (file.getName().startsWith("bomb")) {
                     imageCategory.addImage(IHash.BombState.IDLE, image);
-                else
+                    if (singleSprite.containsKey(IHash.SpriteName.BOMB) == false) {
+                        singleSprite.put(IHash.SpriteName.BOMB, UtilityTools.scaleImage(image, 32, 32));
+                    }
+                } else {
                     imageCategory.addImage(IHash.BombState.EXPLOSION, image);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mp.put(IHash.SpriteName.BOMB, imageCategory);
+        categories.put(IHash.SpriteName.BOMB, imageCategory);
     }
 
     private void loadChars() {
@@ -102,7 +132,7 @@ public class SpriteFactory {
 
                 // B4: Chuyển image category vào hash map
                 String key = "Char" + String.valueOf(i);
-                mp.put(key, imageCategory);
+                categories.put(key, imageCategory);
 
             } catch (Exception e) {
                 e.printStackTrace();

@@ -30,6 +30,8 @@ public interface IHash {
     }
 
     public interface SpriteName {
+        final String HEART = "HEART";
         final String BOMB = "BOMB";
+        final String SPEED = "SPEED";
     }
 }

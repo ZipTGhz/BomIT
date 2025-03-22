@@ -1,5 +1,6 @@
 package Util;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -56,5 +57,26 @@ public class UtilityTools {
 		T[] merged = Arrays.copyOf(arr1, arr1.length + arr2.length);
 		System.arraycopy(arr2, 0, merged, arr1.length, arr2.length);
 		return merged;
+	}
+
+	public static Color getAverageColor(BufferedImage image) {
+		long sumRed = 0, sumGreen = 0, sumBlue = 0;
+		int width = image.getWidth();
+		int height = image.getHeight();
+		int totalPixels = width * height;
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				Color color = new Color(image.getRGB(x, y));
+				sumRed += color.getRed();
+				sumGreen += color.getGreen();
+				sumBlue += color.getBlue();
+			}
+		}
+
+		int avgRed = (int) (sumRed / totalPixels);
+		int avgGreen = (int) (sumGreen / totalPixels);
+		int avgBlue = (int) (sumBlue / totalPixels);
+		return new Color(avgRed, avgGreen, avgBlue);
 	}
 }

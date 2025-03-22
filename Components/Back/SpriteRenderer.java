@@ -1,4 +1,4 @@
-package Components;
+package Components.Back;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

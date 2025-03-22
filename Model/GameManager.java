@@ -2,6 +2,7 @@ package Model;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import Collections.Vector2;
 import Interfaces.IGS;
@@ -22,19 +23,19 @@ public class GameManager {
     }
 
     // Hệ thống
-    // private PlayerController input;
     // Lưu tất cả các thứ cần thiết
     private TileMap tileMap;
     private Player player;
     private ArrayList<Bot> bots = new ArrayList<>();
     private ArrayList<Bomb> bombs = new ArrayList<>();
-
     private ArrayList<Character> characters = new ArrayList<>();
+
+    private HashSet<String> cheatActivated = new HashSet<>();
 
     private GameManager() {
         tileMap = new TileMap();
 
-        setGameSetting(3, 0);
+        setGameSetting(1, 0);
 
         // player = new Player(1 * IGS.BLOCK_SIZE, IGS.BLOCK_SIZE, 1);
         // bots.add(new Bot(15 * IGS.BLOCK_SIZE, 1 * IGS.BLOCK_SIZE, 1, 1));
@@ -44,7 +45,7 @@ public class GameManager {
     }
 
     public void setGameSetting(int botNum, int botDiff) {
-        player = new Player(IGS.BLOCK_SIZE, IGS.BLOCK_SIZE, 1);
+        player = new Player(IGS.BLOCK_SIZE, IGS.BLOCK_SIZE, 2);
         Vector2[] botLocations = new Vector2[] { new Vector2(15 * IGS.BLOCK_SIZE, IGS.BLOCK_SIZE),
                 new Vector2(IGS.BLOCK_SIZE, 13 * IGS.BLOCK_SIZE),
                 new Vector2(15 * IGS.BLOCK_SIZE, 13 * IGS.BLOCK_SIZE) };
@@ -62,9 +63,7 @@ public class GameManager {
         if (bots != null) {
             Character[] characters = new Character[bots.size() + 1];
             characters[0] = player;
-            for (int i = 0; i < bots.size(); ++i) {
-                characters[i + 1] = bots.get(i);
-            }
+            System.arraycopy(bots.toArray(new Character[0]), 0, characters, 1, bots.size());
             return characters;
         }
 

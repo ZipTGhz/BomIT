@@ -13,10 +13,10 @@ import Model.GameManager;
 import Model.Map.Tile;
 
 public class Bot extends Character {
-	private static double INTERVAL = 0.75;
+	private static double INTERVAL;
 	private int difficult;
 	private Random random = null;
-	private double lastTime = INTERVAL;
+	private double lastTime;
 	private ArrayList<Vector2> path = new ArrayList<>();
 	private int pathIdx = 0;
 
@@ -25,9 +25,10 @@ public class Bot extends Character {
 		this.health = 1;
 		this.difficult = difficult;
 		if (difficult == 0)
-			INTERVAL = 0.75;
+			INTERVAL = 1.25;
 		else
 			INTERVAL = 0.5;
+		lastTime = INTERVAL;
 	}
 
 	public Bot(Vector2 positon, int speed, int difficult) {
@@ -35,13 +36,35 @@ public class Bot extends Character {
 		this.health = 1;
 		this.difficult = difficult;
 		if (difficult == 0)
-			INTERVAL = 0.75;
+			INTERVAL = 1;
 		else
 			INTERVAL = 0.5;
+		lastTime = INTERVAL;
 	}
 
 	@Override
 	public void update() {
+		handleAIPath();
+
+		Vector2 curDir = handleMovement();
+
+		if (handleCollision(curDir))
+			return;
+
+		this.move(curDir.x, curDir.y);
+
+		if (GameManager.getInstance().isCharacterPlaceBomb(this) == false && isPlayerInExplosionRange()) {
+			placeBomb();
+		}
+	}
+
+	@Override
+	public void placeBomb() {
+		super.placeBomb();
+		lastTime = INTERVAL;
+	}
+
+	private void handleAIPath() {
 		lastTime += IGS.DELTA_TIME;
 		// Độ khó ảnh hưởng đến mảng đường đi của bot
 		if (lastTime >= INTERVAL) {
@@ -51,13 +74,15 @@ public class Bot extends Character {
 			else
 				mediumMode();
 
-			// for (Vector2 pos : path) {
-			// System.out.print("(" + pos.x + ", " + pos.y + ") ");
-			// }
-			// if (path.size() != 0)
-			// System.out.println();
+			for (Vector2 pos : path) {
+				System.out.print("(" + pos.x + ", " + pos.y + ") ");
+			}
+			if (path.size() != 0)
+				System.out.println();
 		}
+	}
 
+	private Vector2 handleMovement() {
 		// Dựa theo path đã tính ở trên
 		// thực hiện di chuyển theo
 		while (pathIdx < path.size()) {
@@ -98,25 +123,17 @@ public class Bot extends Character {
 				placeBomb();
 			}
 		}
+		return curDir;
+	}
 
+	private boolean handleCollision(Vector2 curDir) {
 		ArrayList<Bomb> bombs = GameManager.getInstance().getBombs();
 		for (Bomb bomb : bombs) {
 			if (CollisionChecker.checkBombCollision(this, curDir, bomb)) {
-				return;
+				return true;
 			}
 		}
-
-		this.move(curDir.x, curDir.y);
-
-		if (GameManager.getInstance().isCharacterPlaceBomb(this) == false && isPlayerInExplosionRange()) {
-			placeBomb();
-		}
-	}
-
-	@Override
-	public void placeBomb() {
-		super.placeBomb();
-		lastTime = INTERVAL;
+		return false;
 	}
 
 	private void easyMode() {
@@ -136,7 +153,7 @@ public class Bot extends Character {
 
 		ArrayList<Vector2> possiblePath = new ArrayList<>();
 		Vector2 curTilePos = this.position.divide(IGS.BLOCK_SIZE);
-		int[][] dir = new int[][] { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+		int[][] dir = new int[][] { { -1, 0 }, { 1, 0 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
 		for (int[] d : dir) {
 			Vector2 nextPath = curTilePos.add(d[0], d[1]);
 			if (dangerZone[nextPath.y][nextPath.x])
