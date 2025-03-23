@@ -30,7 +30,7 @@ public class SpriteFactory {
 
     private SpriteFactory() {
         loadSprites();
-        loadSprite();
+        loadIcons();
     }
 
     public ImageCategory getImageCategory(String key) {
@@ -59,9 +59,9 @@ public class SpriteFactory {
         return singleSprite.getOrDefault(key, null);
     }
 
-    private void loadSprite() {
+    private void loadIcons() {
         try {
-            URL url = getClass().getResource("/Resources/Others");
+            URL url = getClass().getResource("/Resources/Images/Icons");
             File folder = new File(url.toURI());
             File[] files = folder.listFiles((_, name) -> name.endsWith(".png"));
             for (File file : files) {
@@ -87,7 +87,7 @@ public class SpriteFactory {
     private void loadBomb() {
         ImageCategory imageCategory = new ImageCategory();
         try {
-            URL url = Bomb.class.getResource("/Resources/Bomb");
+            URL url = Bomb.class.getResource("/Resources/Images/Bomb");
             File folder = new File(url.toURI());
             File[] files = folder.listFiles((FilenameFilter) (_, name) -> name.endsWith(".png"));
             for (File file : files) {
@@ -115,7 +115,7 @@ public class SpriteFactory {
         // B1: Đọc thư mục của character i
         for (int i = 1; i <= 6; ++i) {
             try {
-                URL url = getClass().getResource("/Resources/Characters/Char " + String.valueOf(i));
+                URL url = getClass().getResource("/Resources/Images/Characters/Char " + String.valueOf(i));
                 File folder = new File(url.toURI());
                 File[] files = folder.listFiles((_, name) -> name.endsWith(".png"));
 

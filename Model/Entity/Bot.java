@@ -8,8 +8,8 @@ import Collections.Vector2;
 import Controller.CollisionChecker;
 import Interfaces.IGS;
 import Interfaces.IHash;
-import Model.AI;
 import Model.GameManager;
+import Model.AI.AI;
 import Model.Map.Tile;
 
 public class Bot extends Character {

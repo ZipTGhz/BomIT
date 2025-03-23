@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Controller.Input;
-import View.GamePanel.GamePanel;
+import View.Panel.GamePanel.GamePanel;
 
 public class GameFrame extends JFrame {
 	private CardLayout _cardLayout;

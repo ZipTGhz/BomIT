@@ -24,7 +24,7 @@ public class TileMap {
         map = new ArrayList<>();
         loadTileSet();
 
-        String path = "/Resources/map.csv";
+        String path = "/Resources/Maps/map.csv";
         loadMap(path);
     }
 
@@ -78,7 +78,7 @@ public class TileMap {
         boolean[][] tileConfig = { { false, false }, { false, true }, { true, true },
                 { true, true }, { true, true }, { true, true }, { true, true }, };
         try {
-            InputStream is = getClass().getResourceAsStream("/Resources/tileSet.png");
+            InputStream is = getClass().getResourceAsStream("/Resources/Maps/tileSet.png");
             BufferedImage tileSets = ImageIO.read(is);
             int tileIndex = 0;
             for (int j = 0; j < tileSets.getHeight(); j += subImageSize) {

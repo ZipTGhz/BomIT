@@ -1,4 +1,4 @@
-package Model;
+package Model.AI;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,6 +8,7 @@ import java.util.Queue;
 
 import Collections.Vector2;
 import Interfaces.IGS;
+import Model.GameManager;
 import Model.Entity.Bomb;
 import Model.Map.Tile;
 

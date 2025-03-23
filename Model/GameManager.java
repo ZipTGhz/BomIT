@@ -2,7 +2,6 @@ package Model;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import Collections.Vector2;
 import Interfaces.IGS;
@@ -30,12 +29,10 @@ public class GameManager {
     private ArrayList<Bomb> bombs = new ArrayList<>();
     private ArrayList<Character> characters = new ArrayList<>();
 
-    private HashSet<String> cheatActivated = new HashSet<>();
-
     private GameManager() {
         tileMap = new TileMap();
 
-        setGameSetting(1, 0);
+        setGameSetting(3, 0);
 
         // player = new Player(1 * IGS.BLOCK_SIZE, IGS.BLOCK_SIZE, 1);
         // bots.add(new Bot(15 * IGS.BLOCK_SIZE, 1 * IGS.BLOCK_SIZE, 1, 1));

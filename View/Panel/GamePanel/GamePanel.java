@@ -1,4 +1,4 @@
-package View.GamePanel;
+package View.Panel.GamePanel;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
