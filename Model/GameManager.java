@@ -29,6 +29,8 @@ public class GameManager {
     private ArrayList<Bomb> bombs = new ArrayList<>();
     private ArrayList<Character> characters = new ArrayList<>();
 
+    private double remainingTime = 180;
+
     private GameManager() {
         tileMap = new TileMap();
 
@@ -39,6 +41,10 @@ public class GameManager {
 
         // player = new Player(4 * GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE, 1);
         // bots.add(new Bot(1 * GS.Config.BLOCK_SIZE,2 * GS.Config.BLOCK_SIZE, 1, 1));
+    }
+
+    public double getRemainingTime() {
+        return remainingTime;
     }
 
     public void setGameSetting(int botNum, int botDiff) {
@@ -73,6 +79,10 @@ public class GameManager {
     }
 
     public void update() {
+        if (remainingTime > 0)
+            remainingTime = Math.max(0, remainingTime - IGS.DELTA_TIME);
+        if (remainingTime <= 0)
+            checkWin();
         for (int i = 0; i < bombs.size(); ++i) {
             Bomb bomb = bombs.get(i);
             bomb.update();
@@ -123,16 +133,6 @@ public class GameManager {
         return false;
     }
 
-    private void checkWin() {
-        // Nếu người chơi == null
-        // Xử thua
-        // Nếu chiều dài mảng bot = 0
-        // Xử thắng
-        if (bots.size() == 0) {
-            System.out.println("WIN");
-        }
-    }
-
     public boolean[][] getDangerZone() {
         Vector2 mapSize = tileMap.getMapSize();
         boolean[][] dangerZone = new boolean[mapSize.y][mapSize.x];
@@ -146,5 +146,18 @@ public class GameManager {
             }
         }
         return dangerZone;
+    }
+
+    private void checkWin() {
+        // Nếu người chơi == null
+        // Xử thua
+        // Nếu chiều dài mảng bot = 0
+        // Xử thắng
+        if (remainingTime <= 0){
+            System.out.println("LOSE");
+        }
+        if (bots.size() == 0) {
+            System.out.println("WIN");
+        }
     }
 }

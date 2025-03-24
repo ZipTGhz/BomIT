@@ -1,16 +1,15 @@
 package Model.AI;
 
+import Collections.Vector2;
+import Interfaces.IGS;
+import Model.Entity.Bomb;
+import Model.GameManager;
+import Model.Map.Tile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import Collections.Vector2;
-import Interfaces.IGS;
-import Model.GameManager;
-import Model.Entity.Bomb;
-import Model.Map.Tile;
 
 public class AI {
     /**
@@ -76,7 +75,7 @@ public class AI {
         Vector2 bestPoint = source;
         double minDist = Vector2.distance(source, dist);
 
-        while (q.size() != 0) {
+        while (!q.isEmpty()) {
             Vector2 cur = q.remove();
             double curDist = Vector2.distance(cur, dist);
             if (curDist < minDist) {
@@ -110,7 +109,7 @@ public class AI {
             tracePath.add(bestPoint.clone());
             bestPoint = mp.get(bestPoint);
         }
-        if (tracePath.size() == 0)
+        if (tracePath.isEmpty())
             tracePath.add(source);
 
         Collections.reverse(tracePath);
