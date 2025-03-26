@@ -13,6 +13,9 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import Model.IGameSettings;
 import View.Sound;
+
+import Interfaces.IGS;
+
 public class MenuPanel extends JPanel {
 	private BufferedImage backgroundImage;
 	private BufferedImage startButtonImage, howToPlayButtonImage;
@@ -35,6 +38,8 @@ public class MenuPanel extends JPanel {
 	public MenuPanel() {
 		System.out.println("Tạo MenuPanel!");
 		this.setPreferredSize(new Dimension(IGameSettings.Config.GAME_WIDTH, IGameSettings.Config.GAME_HEIGHT));
+		this.setPreferredSize(new Dimension(IGS.GAME_WIDTH, IGS.GAME_HEIGHT));
+
 		initPanel();
 		loadAndPlayMusic();
 
@@ -186,4 +191,9 @@ public class MenuPanel extends JPanel {
 
 
 	}
+
+	// private void initPanel() {
+	// 	ImageIcon bg_icon = new ImageIcon(getClass().getResource("/Resources/background.png"));
+	// 	background_image = bg_icon.getImage();
+	// }
 }

@@ -1,13 +1,14 @@
 package View;
 
+import java.awt.CardLayout;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import java.awt.CardLayout;
+import Controller.Input;
+import View.Panel.GamePanel;
 
 public class GameFrame extends JFrame {
-	private static final GameFrame _instance = GameFrame.getInstance();;
-
 	private CardLayout _cardLayout;
 	private JPanel _cardPanel;
 
@@ -19,6 +20,25 @@ public class GameFrame extends JFrame {
 		initComponent();
 		initUI();
 		this.add(_cardPanel);
+		this.addKeyListener(new Input());
+	}
+
+	public void start() {
+		playGame();
+		pack();
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+	}
+
+	public void showMainMenu() {
+		_cardLayout.show(_cardPanel, "mp");
+		_mp.requestFocusInWindow();
+	}
+
+	public void playGame() {
+		_cardLayout.show(_cardPanel, "gp");
+		_gp.start();
+		_gp.requestFocusInWindow();
 	}
 
 	private void initComponent() {
@@ -37,29 +57,6 @@ public class GameFrame extends JFrame {
 		this.setTitle("Boom IT");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
-	}
-
-	public static GameFrame getInstance() {
-		return _instance;
-	}
-
-	public void start() {
-		
-		showMainMenu();
-		
-		this.pack();
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
-	}
-
-	public void showMainMenu() {
-		_cardLayout.show(_cardPanel, "mp");
-		_mp.requestFocusInWindow();
-	}
-
-	public void playGame() {
-		_cardLayout.show(_cardPanel, "gp");
-		_gp.requestFocusInWindow();
 	}
 
 }
