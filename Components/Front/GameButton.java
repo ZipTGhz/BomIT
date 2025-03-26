@@ -1,10 +1,11 @@
 package Components.Front;
 
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.event.MouseAdapter;
 
 public class GameButton extends MouseAdapter {
     private int offset_x = 0, offset_y = 0;
@@ -20,6 +21,11 @@ public class GameButton extends MouseAdapter {
         this.offset_y = offset_y;
 
         this.current = this.normal;
+    }
+
+    public void registerAdapter(Component parent) {
+        parent.addMouseListener(this);
+        parent.addMouseMotionListener(this);
     }
 
     public void render(Graphics g) {

@@ -12,6 +12,8 @@ import Model.Entity.Character;
 import Util.UtilityTools;
 
 public class CharacterCard {
+    private static final Color coverColor = new Color(0, 0, 0, 150);
+
     private Character character;
     private int offset_x = 0, offset_y = 0;
     private BufferedImage avatar;
@@ -45,19 +47,16 @@ public class CharacterCard {
 
     public void render(Graphics g) {
         // Vẽ background
-        g.setColor(bgColor);
-        g.fillRect(offset_x, offset_y, 200, 100);
+        UtilityTools.drawRoundedRect(g, offset_x, offset_y, 200, 100, 20, 20, bgColor);
 
         // Vẽ avatar
-        g.setColor(Color.WHITE);
-        g.fillRect(offset_x + 10, offset_y + 10, avatar.getWidth() + 5, avatar.getHeight() + 5);
-        g.drawImage(avatar, offset_x + 12, offset_y + 7, null);
+        UtilityTools.drawRoundedRect(g, offset_x + 10, offset_y + 10, avatar.getWidth(), avatar.getHeight(), 10, 10, Color.WHITE);
+        g.drawImage(avatar, offset_x + 10, offset_y + 5, null);
 
         // Vẽ nền cho thuộc tính
-        g.setColor(Color.WHITE);
-        g.fillRect(offset_x + 70, offset_y + 10, 100, 20);
-        g.fillRect(offset_x + 70, offset_y + 40, 100, 20);
-        g.fillRect(offset_x + 70, offset_y + 70, 100, 20);
+        UtilityTools.drawRoundedRect(g, offset_x + 70, offset_y + 10, 100, 20, 10, 10, Color.WHITE);
+        UtilityTools.drawRoundedRect(g, offset_x + 70, offset_y + 40, 100, 20, 10, 10, Color.WHITE);
+        UtilityTools.drawRoundedRect(g, offset_x + 70, offset_y + 70, 100, 20, 10, 10, Color.WHITE);
 
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 18));
@@ -73,8 +72,7 @@ public class CharacterCard {
 
         // Nếu nhân vật chết thì thêm lớp phủ mờ
         if (character.getHealth() == 0) {
-            g.setColor(new Color(0, 0, 0, 150));
-            g.fillRect(offset_x, offset_y, 200, 100);
+            UtilityTools.drawRoundedRect(g, offset_x, offset_y, 200, 100, 20, 20, coverColor);
         }
     }
 

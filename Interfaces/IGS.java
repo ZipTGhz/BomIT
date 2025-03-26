@@ -8,7 +8,6 @@ public interface IGS {
 	final int FPS = 60;
 	final double DELTA_TIME = 1.0 / FPS;
 
-	// final int OFFSET_X = 128, OFFSET_Y = 20;
 	final double EPSILON = 1e-6;
 
 	

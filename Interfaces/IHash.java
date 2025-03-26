@@ -2,7 +2,6 @@ package Interfaces;
 
 public interface IHash {
     public interface CharacterState {
-        // Cho nhân vật
         final String MOVE_LEFT = "MOVE_LEFT";
         final String MOVE_RIGHT = "MOVE_RIGHT";
         final String MOVE_UP = "MOVE_UP";
@@ -19,14 +18,9 @@ public interface IHash {
         final String EXPLOSION = "EXPLOSION";
     }
 
-    public interface BlockState {
-        // Cho các khối
-        final String IDLE = "IDLE";
-    }
-
     public interface InputDirection {
-        final String HORIZONTAL = "Horizontal";
-        final String VERTICAL = "Vertical";
+        final String HORIZONTAL = "HORIZONTAL";
+        final String VERTICAL = "VERTICAL";
     }
 
     public interface SpriteName {

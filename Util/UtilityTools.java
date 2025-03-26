@@ -1,12 +1,15 @@
 package Util;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -86,37 +89,53 @@ public class UtilityTools {
 		return new Color(avgRed, avgGreen, avgBlue);
 	}
 
-	public static File[] getFiles(String path) {
-		try {
-			URL url = UtilityTools.class.getResource(path);
-			File folder = new File(url.toURI());
-			File[] files = folder.listFiles();
-			return files;
-		} catch (Exception e) {
-			System.out.println("Xảy ra lỗi khi đọc thư mục:");
-			e.printStackTrace();
-			return new File[0];
-		}
+	public static File[] getFiles(String path) throws URISyntaxException {
+		URL url = UtilityTools.class.getResource(path);
+		File folder = new File(url.toURI());
+		File[] files = folder.listFiles();
+		return files;
 	}
 
-	public static File[] getFiles(String path, String... filters) {
-		try {
-			URL url = UtilityTools.class.getResource(path);
-			File folder = new File(url.toURI());
+	public static File[] getFiles(String path, String... filters) throws URISyntaxException {
 
-			Set<String> filterSet = new HashSet<>(Arrays.asList(filters)); // Dùng Set để tìm nhanh hơn
-			return folder.listFiles((FilenameFilter) (_, name) -> {
-				int i = name.lastIndexOf('.');
-				if (i == -1 || i == name.length() - 1)
-					return false;
-				String extension = name.substring(i);
-				return filterSet.contains(extension);
-			});
+		URL url = UtilityTools.class.getResource(path);
+		File folder = new File(url.toURI());
 
-		} catch (Exception e) {
-			System.out.println("Xảy ra lỗi khi đọc thư mục:");
-			e.printStackTrace();
-			return new File[0];
-		}
+		Set<String> filterSet = new HashSet<>(Arrays.asList(filters)); // Dùng Set để tìm nhanh hơn
+		return folder.listFiles((FilenameFilter) (_, name) -> {
+			int i = name.lastIndexOf('.');
+			if (i == -1 || i == name.length() - 1)
+				return false;
+			String extension = name.substring(i);
+			return filterSet.contains(extension);
+		});
+
+	}
+
+	public static void drawRoundedRect(Graphics g, int x, int y, int width, int height, int arcWidth, int arcHeight,
+			Color fillColor) {
+		Graphics2D g2d = (Graphics2D) g;
+		// Bật khử răng cưa
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		// Vẽ nền
+		g2d.setColor(fillColor);
+		g2d.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+	}
+
+	public static void drawRoundedRect(Graphics g, int x, int y, int width, int height, int arcWidth, int arcHeight,
+			Color fillColor, Color borderColor, float borderWidth) {
+		Graphics2D g2d = (Graphics2D) g;
+		// Bật khử răng cưa
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		// Vẽ nền
+		g2d.setColor(fillColor);
+		g2d.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+
+		// Vẽ viền
+		g2d.setColor(borderColor);
+		g2d.setStroke(new BasicStroke(borderWidth));
+		g2d.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
 	}
 }

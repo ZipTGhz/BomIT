@@ -2,8 +2,6 @@ package Model;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FilenameFilter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -12,7 +10,6 @@ import javax.imageio.ImageIO;
 
 import Interfaces.IGS;
 import Interfaces.IHash;
-import Model.Entity.Bomb;
 import Util.UtilityTools;
 
 public class SpriteFactory {
@@ -60,10 +57,9 @@ public class SpriteFactory {
     }
 
     private void loadIcons() {
+
         try {
-            URL url = getClass().getResource("/Resources/Images/Icons");
-            File folder = new File(url.toURI());
-            File[] files = folder.listFiles((_, name) -> name.endsWith(".png"));
+            File[] files = UtilityTools.getFiles("/Resources/Images/Icons", ".png");
             for (File file : files) {
                 BufferedImage image = ImageIO.read(file);
                 image = UtilityTools.scaleImage(image, 16, 16);
@@ -87,9 +83,7 @@ public class SpriteFactory {
     private void loadBomb() {
         ImageCategory imageCategory = new ImageCategory();
         try {
-            URL url = Bomb.class.getResource("/Resources/Images/Bomb");
-            File folder = new File(url.toURI());
-            File[] files = folder.listFiles((FilenameFilter) (_, name) -> name.endsWith(".png"));
+            File[] files = UtilityTools.getFiles("/Resources/Images/Bomb", ".png");
             for (File file : files) {
                 BufferedImage image = UtilityTools.scaleImage(ImageIO.read(file), IGS.BLOCK_SIZE, IGS.BLOCK_SIZE);
                 if (file.getName().startsWith("bomb")) {
@@ -115,9 +109,7 @@ public class SpriteFactory {
         // B1: Đọc thư mục của character i
         for (int i = 1; i <= 6; ++i) {
             try {
-                URL url = getClass().getResource("/Resources/Images/Characters/Char " + String.valueOf(i));
-                File folder = new File(url.toURI());
-                File[] files = folder.listFiles((_, name) -> name.endsWith(".png"));
+                File[] files = UtilityTools.getFiles("/Resources/Images/Characters/Char " + String.valueOf(i), ".png");
 
                 // B2: Cắt ảnh
                 BufferedImage[] moveImages = UtilityTools.splitImage(ImageIO.read(files[0]), 48);

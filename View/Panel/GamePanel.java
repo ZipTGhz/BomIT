@@ -110,8 +110,8 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	private void loadBtnPause() {
-		File[] files = UtilityTools.getFiles("/Resources/Images/Buttons/Pause", ".png");
 		try {
+			File[] files = UtilityTools.getFiles("/Resources/Images/Buttons/Pause", ".png");
 			BufferedImage normal = ImageIO.read(files[0]);
 			BufferedImage clicked = ImageIO.read(files[1]);
 			BufferedImage hover = ImageIO.read(files[2]);
@@ -121,8 +121,7 @@ public class GamePanel extends JPanel implements Runnable {
 			hover = UtilityTools.scaleImage(hover, hover.getWidth() * 3, hover.getHeight() * 3);
 
 			btnPause = new GameButton(normal, clicked, hover, 860, 600);
-			this.addMouseListener(btnPause);
-			this.addMouseMotionListener(btnPause);
+			btnPause.registerAdapter(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
