@@ -1,10 +1,9 @@
-import View.GameFrame;
+import View.Frame.GameFrame;
 
 public class BomIT {
 
 	public static void main(String[] args) {
-		GameFrame gf = new GameFrame();
-		gf.start();
+		GameFrame.getInstance().start();
 	}
 
 }

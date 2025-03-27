@@ -1,4 +1,4 @@
-package View;
+package View.Panel;
 
 import java.awt.Graphics;
 import javax.swing.JPanel;

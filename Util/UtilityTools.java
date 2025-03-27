@@ -16,6 +16,8 @@ import java.util.Set;
 
 public class UtilityTools {
 	public static BufferedImage scaleImage(BufferedImage original, int width, int height) {
+		if (original.getWidth() == width && original.getHeight() == height)
+			return original;
 		// Tạo một ảnh rỗng với kích thước người dùng mong muốn
 		BufferedImage scaled = new BufferedImage(width, height, original.getType());
 		// Lấy đồ hoạ của ảnh để vẽ lên ảnh rỗng đó
@@ -30,18 +32,8 @@ public class UtilityTools {
 	public static BufferedImage[] scaleImage(BufferedImage[] images, int width, int height) {
 		BufferedImage[] res = new BufferedImage[images.length];
 
-		for (int i = 0; i < images.length; ++i) {
-			BufferedImage original = images[i];
-			// Tạo một ảnh rỗng với kích thước người dùng mong muốn
-			BufferedImage scaled = new BufferedImage(width, height, original.getType());
-			// Lấy đồ hoạ của ảnh để vẽ lên ảnh rỗng đó
-			Graphics2D g2d = scaled.createGraphics();
-			// Vẽ ảnh gốc lên scaled với kích thước mong muốn
-			g2d.drawImage(original, 0, 0, width, height, null);
-			// Giải phóng tài nguyên sau khi xong, tránh rò rỉ bộ nhớ
-			g2d.dispose();
-			res[i] = scaled;
-		}
+		for (int i = 0; i < images.length; ++i)
+			res[i] = UtilityTools.scaleImage(images[i], width, height);
 
 		return res;
 	}

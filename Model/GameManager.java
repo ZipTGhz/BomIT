@@ -15,7 +15,7 @@ import Model.Map.TileMap;
  * Xử lý tất cả logic chơi game ở đây
  */
 public class GameManager {
-    private static GameManager instance = new GameManager();
+    private static final GameManager instance = new GameManager();
 
     public static GameManager getInstance() {
         return instance;
@@ -25,35 +25,31 @@ public class GameManager {
     // Lưu tất cả các thứ cần thiết
     private TileMap tileMap;
     private Player player;
-    private ArrayList<Bot> bots = new ArrayList<>();
-    private ArrayList<Bomb> bombs = new ArrayList<>();
-    private ArrayList<Character> characters = new ArrayList<>();
+    private ArrayList<Bot> bots;
+    private ArrayList<Bomb> bombs;
+    private ArrayList<Character> characters;
 
     private double remainingTime = 180;
 
     private GameManager() {
-        tileMap = new TileMap();
-
-        setGameSetting(3, 0);
-
-        // player = new Player(1 * IGS.BLOCK_SIZE, IGS.BLOCK_SIZE, 1);
-        // bots.add(new Bot(15 * IGS.BLOCK_SIZE, 1 * IGS.BLOCK_SIZE, 1, 1));
-
-        // player = new Player(4 * GS.Config.BLOCK_SIZE, GS.Config.BLOCK_SIZE, 1);
-        // bots.add(new Bot(1 * GS.Config.BLOCK_SIZE,2 * GS.Config.BLOCK_SIZE, 1, 1));
+        setNewGame(3, 0);
     }
 
     public double getRemainingTime() {
         return remainingTime;
     }
 
-    public void setGameSetting(int botNum, int botDiff) {
+    public void setNewGame(int botNum, int botDiff) {
+        tileMap = new TileMap();
+        bots = new ArrayList<>();
+        bombs = new ArrayList<>();
+        characters = new ArrayList<>();
+
         player = new Player(IGS.BLOCK_SIZE, IGS.BLOCK_SIZE, 2);
         Vector2[] botLocations = new Vector2[] { new Vector2(15 * IGS.BLOCK_SIZE, IGS.BLOCK_SIZE),
                 new Vector2(IGS.BLOCK_SIZE, 13 * IGS.BLOCK_SIZE),
                 new Vector2(15 * IGS.BLOCK_SIZE, 13 * IGS.BLOCK_SIZE) };
 
-        bots.clear();
         for (int i = 0; i < botNum; ++i)
             bots.add(new Bot(botLocations[i].x, botLocations[i].y, 1, botDiff));
     }
@@ -153,7 +149,7 @@ public class GameManager {
         // Xử thua
         // Nếu chiều dài mảng bot = 0
         // Xử thắng
-        if (remainingTime <= 0){
+        if (remainingTime <= 0) {
             System.out.println("LOSE");
         }
         if (bots.size() == 0) {

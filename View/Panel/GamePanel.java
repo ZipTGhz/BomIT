@@ -122,6 +122,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 			btnPause = new GameButton(normal, clicked, hover, 860, 600);
 			btnPause.registerAdapter(this);
+			btnPause.setOnClickAction(() -> System.out.println("PAUSE BUTTON CLICKED"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
