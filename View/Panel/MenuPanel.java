@@ -14,7 +14,6 @@ import Interfaces.IGS;
 import Model.SoundManager;
 import Model.SoundType;
 import Util.UtilityTools;
-import View.Frame.GameFrame;
 
 public class MenuPanel extends JPanel {
 	// Cấu hình chung
