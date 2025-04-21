@@ -10,6 +10,8 @@ import Model.Entity.Bot;
 import Model.Entity.Character;
 import Model.Entity.Player;
 import Model.Map.TileMap;
+import View.Dialog.EndGameDialog;
+import View.Frame.GameFrame;
 
 /**
  * Xử lý tất cả logic chơi game ở đây
@@ -31,10 +33,6 @@ public class GameManager {
 
     private double remainingTime = 180;
 
-    private GameManager() {
-        setNewGame(3, 0);
-    }
-
     public double getRemainingTime() {
         return remainingTime;
     }
@@ -45,7 +43,7 @@ public class GameManager {
         bombs = new ArrayList<>();
         characters = new ArrayList<>();
 
-        player = new Player(IGS.BLOCK_SIZE, IGS.BLOCK_SIZE, 2);
+        player = new Player(IGS.BLOCK_SIZE, IGS.BLOCK_SIZE, 1);
         Vector2[] botLocations = new Vector2[] { new Vector2(15 * IGS.BLOCK_SIZE, IGS.BLOCK_SIZE),
                 new Vector2(IGS.BLOCK_SIZE, 13 * IGS.BLOCK_SIZE),
                 new Vector2(15 * IGS.BLOCK_SIZE, 13 * IGS.BLOCK_SIZE) };
@@ -118,7 +116,6 @@ public class GameManager {
 
     public boolean deleteCharacter(Character character) {
         if (character instanceof Player) {
-            System.out.println("LOSE");
             checkWin();
             return true;
         } else if (bots.contains(character)) {
@@ -149,24 +146,28 @@ public class GameManager {
         // Xử thua
         // Nếu chiều dài mảng bot = 0
         // Xử thắng
-        if (remainingTime <= 0) {
+        if (player.getHealth() == 0 || remainingTime <= 0) {
+            EndGameDialog egd = new EndGameDialog(GameFrame.getInstance(), false);
+            egd.showDialog();
             System.out.println("LOSE");
         }
         if (bots.size() == 0) {
+            EndGameDialog egd = new EndGameDialog(GameFrame.getInstance(), true);
+            egd.showDialog();
             System.out.println("WIN");
         }
     }
 
     public void resetGameManager() {
         // Reset lại thời gian
-//        remainingTime = 180;
-//
-//        // Lấy thông tin cài đặt mới
-//        int botNum = GameSettings.getInstance().getNumEnemies();
-//        int botDiff = GameSettings.getInstance().getDifficulty();
-//
-//        // Tạo lại toàn bộ game mới
-//        setNewGame(botNum, botDiff);
+        // remainingTime = 180;
+        //
+        // // Lấy thông tin cài đặt mới
+        // int botNum = GameSettings.getInstance().getNumEnemies();
+        // int botDiff = GameSettings.getInstance().getDifficulty();
+        //
+        // // Tạo lại toàn bộ game mới
+        // setNewGame(botNum, botDiff);
     }
 
 }

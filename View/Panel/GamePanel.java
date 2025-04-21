@@ -16,10 +16,9 @@ import Util.UtilityTools;
 import View.Dialog.PauseDialog;
 import View.Frame.GameFrame;
 
-//vấn đề kinh điển khi xử lý "pause – resume" với đồng hồ chạy bằng delta time (IGS.DELTA_TIME
 public class GamePanel extends JPanel implements Runnable {
 	private static boolean paused = false;
-	boolean isWin = true;  // Hoặc false, tùy thuộc vào kết quả game
+	boolean isWin = true; // Hoặc false, tùy thuộc vào kết quả game
 
 	public static void setPausedGame(boolean value) {
 		paused = value;
@@ -35,13 +34,19 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public GamePanel() {
 		config();
-		init();
 	}
-	public void start() {
+
+	public void start(int botNum, int botDiff) {
+		GameManager.getInstance().setNewGame(botNum, botDiff);
+		init();
 		if (gameThread == null) {
 			gameThread = new Thread(this);
 			gameThread.start();
 		}
+	}
+
+	public void stop() {
+		gameThread = null;
 	}
 
 	@Override
@@ -52,10 +57,9 @@ public class GamePanel extends JPanel implements Runnable {
 		double delta = 0;
 
 		while (gameThread != null) {
+			currentTime = System.nanoTime();
 			if (!paused) {
-				currentTime = System.nanoTime();
 				delta += (currentTime - lastTime) / drawInterval;
-				lastTime = currentTime;
 
 				if (delta >= 1) {
 					GameManager.getInstance().update();
@@ -63,14 +67,8 @@ public class GamePanel extends JPanel implements Runnable {
 					this.repaint();
 					delta--;
 				}
-			} else {
-				// Nếu đang pause thì đợi 10ms rồi check lại (tránh CPU bị full load)
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 			}
+			lastTime = currentTime;
 		}
 
 	}
@@ -147,5 +145,6 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setPreferredSize(new Dimension(IGS.GAME_WIDTH, IGS.GAME_HEIGHT));
 		this.setDoubleBuffered(true);
 		this.setLayout(null);
+		paused = false;
 	}
 }

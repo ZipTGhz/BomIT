@@ -44,7 +44,7 @@ public class GameSettingPanel extends JPanel {
         JPanel settingsPanel = new JPanel();
         settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
         settingsPanel.setOpaque(false);
-        
+
         // Add components to settings panel
         settingsPanel.add(enemiesPanel);
         settingsPanel.add(Box.createVerticalStrut(20));
@@ -62,8 +62,8 @@ public class GameSettingPanel extends JPanel {
             GameFrame.getInstance().showPanel("MENU_PANEL");
         });
         bottomPanel.setNextAction(() -> {
-//            saveSettings();
-//            GameFrame.getInstance().playGame();
+            saveSettings();
+            // GameFrame.getInstance().playGame();
             GameFrame.getInstance().showPanel("GAME_PANEL");
         });
 
@@ -80,12 +80,11 @@ public class GameSettingPanel extends JPanel {
         settings.setDifficulty(difficultyPanel.getSelectedDifficulty());
     }
 
-
     private void init() {
         try {
             File[] files = UtilityTools.getFiles("/Resources/MenuPanel", ".png", ".jpg", ".jpeg");
             BufferedImage original = ImageIO.read(files[0]);
-            backgroundImage = UtilityTools.scaleImage(original, original.getWidth() + 30, original.getHeight() );
+            backgroundImage = UtilityTools.scaleImage(original, original.getWidth() + 30, original.getHeight());
             bgX = (IGS.GAME_WIDTH - backgroundImage.getWidth()) / 1;
             bgY = (IGS.GAME_HEIGHT - backgroundImage.getHeight()) / 1;
             SoundManager.getInstance().playMusic(SoundType.BACKGROUND_1);

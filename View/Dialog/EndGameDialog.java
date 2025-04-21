@@ -1,4 +1,5 @@
 package View.Dialog;
+
 import View.Frame.GameFrame;
 import View.Panel.GamePanel;
 
@@ -7,17 +8,17 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class EndGameDialog extends JDialog {
-    private static final int DIALOG_WIDTH    = 450;
-    private static final int DIALOG_HEIGHT   = 200;
-    private static final int BUTTON_WIDTH    = 175;
-    private static final int BUTTON_HEIGHT   = 50;
-    private static final int BUTTON_SPACING  = 30;
+    private static final int DIALOG_WIDTH = 450;
+    private static final int DIALOG_HEIGHT = 200;
+    private static final int BUTTON_WIDTH = 175;
+    private static final int BUTTON_HEIGHT = 50;
+    private static final int BUTTON_SPACING = 30;
 
     public EndGameDialog(JFrame owner, boolean isWin) {
-        super(owner, true);            // modal dialog
-        setUndecorated(true);          // Bỏ viền cửa sổ mặc định
-        setBackground(new Color(0, 0, 0, 0));  // Trong suốt
-        initComponents(isWin);  // Khởi tạo với thông báo thắng/thua
+        super(owner, true); // modal dialog
+        setUndecorated(true); // Bỏ viền cửa sổ mặc định
+        setBackground(new Color(0, 0, 0, 0)); // Trong suốt
+        initComponents(isWin); // Khởi tạo với thông báo thắng/thua
     }
 
     private void initComponents(boolean isWin) {
@@ -55,13 +56,18 @@ public class EndGameDialog extends JDialog {
 
         JButton btnMainMenu = createStyledButton("MAIN MENU");
         btnMainMenu.addActionListener(e -> {
+            // dispose();
+            // GameFrame.getInstance().showPanel("MENU_PANEL");
+
             dispose();
+            GamePanel.setPausedGame(true);
+            GameFrame.getInstance().resetApplication();
             GameFrame.getInstance().showPanel("MENU_PANEL");
         });
 
         JButton btnExit = createStyledButton("EXIT");
         btnExit.addActionListener(e -> {
-            System.exit(0);  // Đóng ứng dụng
+            System.exit(0); // Đóng ứng dụng
         });
 
         btnPanel.add(btnMainMenu);
@@ -139,4 +145,3 @@ public class EndGameDialog extends JDialog {
         glass.setVisible(false);
     }
 }
-

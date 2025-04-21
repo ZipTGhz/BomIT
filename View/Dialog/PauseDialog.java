@@ -7,14 +7,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PauseDialog extends JDialog {
-    private static final int DIALOG_WIDTH    = 450;
-    private static final int DIALOG_HEIGHT   = 200;
-    private static final int BUTTON_WIDTH    = 175;
-    private static final int BUTTON_HEIGHT   = 50;
-    private static final int BUTTON_SPACING  = 30;
+    private static final int DIALOG_WIDTH = 450;
+    private static final int DIALOG_HEIGHT = 200;
+    private static final int BUTTON_WIDTH = 175;
+    private static final int BUTTON_HEIGHT = 50;
+    private static final int BUTTON_SPACING = 30;
 
     public PauseDialog(JFrame owner) {
-        super(owner, true);            // modal dialog
+        super(owner, true); // modal dialog
         setUndecorated(true);// bỏ viền cửa sổ mặc định
         setBackground(new Color(0, 0, 0, 0));
         initComponents();
@@ -25,9 +25,8 @@ public class PauseDialog extends JDialog {
         JPanel content = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D)g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_ON);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(new Color(255, 255, 255, 255)); // xám bán trong suốt
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
                 g2.dispose();
@@ -86,12 +85,13 @@ public class PauseDialog extends JDialog {
 
             @Override
             protected void paintBorder(Graphics g) {
-//                Graphics2D g2 = (Graphics2D) g.create();
-//                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//                g2.setColor(Color.CYAN);
-//                g2.setStroke(new BasicStroke(2));
-//                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 30, 30);
-//                g2.dispose();
+                // Graphics2D g2 = (Graphics2D) g.create();
+                // g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                // RenderingHints.VALUE_ANTIALIAS_ON);
+                // g2.setColor(Color.CYAN);
+                // g2.setStroke(new BasicStroke(2));
+                // g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 30, 30);
+                // g2.dispose();
             }
         };
 

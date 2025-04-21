@@ -74,11 +74,11 @@ public class Bot extends Character {
 			else
 				mediumMode();
 
-			for (Vector2 pos : path) {
-				System.out.print("(" + pos.x + ", " + pos.y + ") ");
-			}
-			if (path.size() != 0)
-				System.out.println();
+			// for (Vector2 pos : path) {
+			// 	System.out.print("(" + pos.x + ", " + pos.y + ") ");
+			// }
+			// if (path.size() != 0)
+			// 	System.out.println();
 		}
 	}
 
