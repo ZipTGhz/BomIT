@@ -14,6 +14,7 @@ import Interfaces.IGS;
 import Model.SoundManager;
 import Model.SoundType;
 import Util.UtilityTools;
+import View.Frame.GameFrame;
 
 public class MenuPanel extends JPanel {
 	// Cấu hình chung
@@ -61,33 +62,35 @@ public class MenuPanel extends JPanel {
 	}
 
 	private void loadImages(File[] files) throws Exception {
-		backgroundImage = ImageIO.read(files[0]);
-		bgX = (IGS.GAME_WIDTH - backgroundImage.getWidth()) / 5;
-		bgY = (IGS.GAME_HEIGHT - backgroundImage.getHeight()) / 5;
+		BufferedImage original = ImageIO.read(files[0]);
+		backgroundImage = UtilityTools.scaleImage(original, original.getWidth() + 30, original.getHeight() );
+		bgX = (IGS.GAME_WIDTH - backgroundImage.getWidth()) / 1;
+		bgY = (IGS.GAME_HEIGHT - backgroundImage.getHeight()) / 1;
 	}
 
 	private void loadButtons(File[] files) throws Exception {
 		// Nút start
-		int startButtonX = IGS.GAME_WIDTH - btnWidth - 120;
-		int startButtonY = IGS.GAME_HEIGHT / 2 - 120;
-		btnStart = new GameButton(ImageIO.read(files[4]), null, null, startButtonX, startButtonY, btnWidth, btnHeight);
+		int startButtonX = (IGS.GAME_WIDTH - btnWidth) / 2; //IGS.GAME_WIDTH - btnWidth - 120
+		int startButtonY = IGS.GAME_HEIGHT / 2 ; //IGS.GAME_HEIGHT/2 - 120
+		BufferedImage startImg = ImageIO.read(files[4]);
+		BufferedImage resizedStartImg = UtilityTools.scaleImage(startImg, btnWidth, btnHeight);
+		btnStart = new GameButton(resizedStartImg, null, null, startButtonX, startButtonY, btnWidth, btnHeight);
 		btnStart.registerAdapter(this);
 		btnStart.setOnClickAction(new Runnable() {
 			@Override
 			public void run() {
-				// GameFrame.getInstance().showGameMenuSetting();
-				repaint();
+				 GameFrame.getInstance().showPanel("GAME_SETTING_PANEL");
 			}
 		});
 
 		// Nút how to play
 		int howToPlayButtonX = startButtonX;
 		int howToPlayButtonY = startButtonY + btnHeight + 20;
-		btnHowToPlay = new GameButton(ImageIO.read(files[2]), null, null, howToPlayButtonX, howToPlayButtonY, btnWidth,
+		BufferedImage howtoplayImg = ImageIO.read(files[2]);
+		btnHowToPlay = new GameButton(howtoplayImg, null, null, howToPlayButtonX, howToPlayButtonY, btnWidth,
 				btnHeight);
 		btnHowToPlay.registerAdapter(this);
 		btnHowToPlay.setOnClickAction(new Runnable() {
-
 			@Override
 			public void run() {
 				boolean currentState = howToPlayDialog.isEnabled();

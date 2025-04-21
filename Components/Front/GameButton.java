@@ -106,6 +106,6 @@ public class GameButton extends MouseAdapter {
 
     private boolean isInside(Point p) {
         return p.getX() >= offset_x && p.getX() <= offset_x + current.getWidth() && p.getY() >= offset_y
-                && offset_y <= offset_y + current.getHeight();
+                && p.getY() <= offset_y + current.getHeight();
     }
 }

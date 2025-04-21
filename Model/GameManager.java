@@ -156,4 +156,17 @@ public class GameManager {
             System.out.println("WIN");
         }
     }
+
+    public void resetGameManager() {
+        // Reset lại thời gian
+//        remainingTime = 180;
+//
+//        // Lấy thông tin cài đặt mới
+//        int botNum = GameSettings.getInstance().getNumEnemies();
+//        int botDiff = GameSettings.getInstance().getDifficulty();
+//
+//        // Tạo lại toàn bộ game mới
+//        setNewGame(botNum, botDiff);
+    }
+
 }

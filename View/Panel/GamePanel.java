@@ -1,12 +1,11 @@
 package View.Panel;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import Components.Front.CharacterCard;
 import Components.Front.GameButton;
@@ -14,12 +13,16 @@ import Interfaces.IGS;
 import Model.GameManager;
 import Model.Entity.Character;
 import Util.UtilityTools;
+import View.Dialog.PauseDialog;
+import View.Frame.GameFrame;
 
+//vấn đề kinh điển khi xử lý "pause – resume" với đồng hồ chạy bằng delta time (IGS.DELTA_TIME
 public class GamePanel extends JPanel implements Runnable {
 	private static boolean paused = false;
+	boolean isWin = true;  // Hoặc false, tùy thuộc vào kết quả game
 
-	public static void setPausedGame(boolean paused) {
-		GamePanel.paused = paused;
+	public static void setPausedGame(boolean value) {
+		paused = value;
 	}
 
 	private Thread gameThread;
@@ -28,12 +31,12 @@ public class GamePanel extends JPanel implements Runnable {
 
 	private final String TIME = "TIME: ";
 	private GameButton btnPause;
+	private PauseDialog pauseDialog;
 
 	public GamePanel() {
 		config();
 		init();
 	}
-
 	public void start() {
 		if (gameThread == null) {
 			gameThread = new Thread(this);
@@ -49,16 +52,24 @@ public class GamePanel extends JPanel implements Runnable {
 		double delta = 0;
 
 		while (gameThread != null) {
-			if (paused)
-				break;
-			currentTime = System.nanoTime();
-			delta += (currentTime - lastTime) / drawInterval;
-			lastTime = currentTime;
-			if (delta >= 1) {
-				GameManager.getInstance().update();
-				this.update();
-				this.repaint();
-				--delta;
+			if (!paused) {
+				currentTime = System.nanoTime();
+				delta += (currentTime - lastTime) / drawInterval;
+				lastTime = currentTime;
+
+				if (delta >= 1) {
+					GameManager.getInstance().update();
+					this.update();
+					this.repaint();
+					delta--;
+				}
+			} else {
+				// Nếu đang pause thì đợi 10ms rồi check lại (tránh CPU bị full load)
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -100,7 +111,6 @@ public class GamePanel extends JPanel implements Runnable {
 			charCards[i] = tmp;
 			offset_y += 125;
 		}
-
 		loadButtons();
 
 	}
@@ -122,7 +132,11 @@ public class GamePanel extends JPanel implements Runnable {
 
 			btnPause = new GameButton(normal, clicked, hover, 860, 600);
 			btnPause.registerAdapter(this);
-			btnPause.setOnClickAction(() -> System.out.println("PAUSE BUTTON CLICKED"));
+			btnPause.setOnClickAction(() -> {
+				pauseDialog = new PauseDialog(GameFrame.getInstance());
+				pauseDialog.showDialog();
+				System.out.println("PAUSE BUTTON CLICKED");
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
