@@ -6,6 +6,7 @@ import Model.Entity.Bomb;
 import Model.GameManager;
 import Model.Map.Tile;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -56,7 +57,7 @@ public class AI {
 
         boolean isSafeZone = true;
         if (dangerZone[source.y][source.x]) {
-            dist = findClosestSafePosition(source, dangerZone);
+            dist = findClosestSafePosition(source, dangerZone, dist);
             isSafeZone = false;
         }
 
@@ -69,8 +70,7 @@ public class AI {
         HashMap<Vector2, Vector2> mp = new HashMap<>();
 
         // 4 hướng di chuyển
-        Vector2[] dir = new Vector2[] { Vector2.down(), Vector2.left(), Vector2.right(),
-                Vector2.up() };
+        Vector2[] dir = new Vector2[] { Vector2.down(), Vector2.left(), Vector2.right(), Vector2.up() };
 
         Vector2 bestPoint = source;
         double minDist = Vector2.distance(source, dist);
@@ -91,8 +91,7 @@ public class AI {
                 Vector2 next = cur.add(d);
                 if (next.x >= 0 && next.x < seen[0].length && next.y >= 0 && next.y < seen.length
                         && seen[next.y][next.x] == false
-                        && (isSafeZone && dangerZone[next.y][next.x] == false
-                                || isSafeZone == false)) {
+                        && (isSafeZone && dangerZone[next.y][next.x] == false || isSafeZone == false)) {
                     int index = GameManager.getInstance().getTileMap().getTileIndex(next.y, next.x);
                     Tile tile = GameManager.getInstance().getTileMap().getTile(index);
                     if (tile.getIsCollision() == false) {
@@ -117,7 +116,7 @@ public class AI {
         return tracePath;
     }
 
-    private static Vector2 findClosestSafePosition(Vector2 source, boolean[][] dangerZone) {
+    private static Vector2 findClosestSafePosition(Vector2 source, boolean[][] dangerZone, Vector2 dist) {
         Vector2 mapSize = GameManager.getInstance().getTileMap().getMapSize();
         boolean[][] seen = new boolean[mapSize.y][mapSize.x];
 
@@ -125,8 +124,19 @@ public class AI {
         q.add(source);
         seen[source.y][source.x] = true;
 
-        Vector2[] dir = new Vector2[] { Vector2.down(), Vector2.left(), Vector2.right(),
-                Vector2.up() };
+        Vector2[] dir = new Vector2[] { Vector2.left(), Vector2.right(), Vector2.up(), Vector2.down() };
+
+        Vector2 dirToPlayer = Vector2.getDirection(source, dist);
+        if (dirToPlayer.equals(Vector2.zero()) == false) {
+            // System.out.println(dirToPlayer.toString());
+            Arrays.sort(dir, (a, b) -> {
+                if (a.equals(dirToPlayer))
+                    return 1;
+                if (b.equals(dirToPlayer))
+                    return -1;
+                return 0;
+            });
+        }
 
         while (q.size() != 0) {
             Vector2 cur = q.remove();

@@ -144,14 +144,13 @@ public class Vector2 {
 	}
 
 	public static Vector2 getDirection(Vector2 current, Vector2 next) {
-		if (next.y > current.y) {
-			return Vector2.down();
-		} else if (next.x < current.x) {
-			return Vector2.left();
-		} else if (next.x > current.x) {
-			return Vector2.right();
-		} else if (next.y < current.y) {
-			return Vector2.up();
+		double dx = next.x - current.x;
+		double dy = next.y - current.y;
+
+		if (Math.abs(dx) > Math.abs(dy)) {
+			return dx > 0 ? Vector2.right() : Vector2.left();
+		} else if (Math.abs(dy) > 0) {
+			return dy > 0 ? Vector2.down() : Vector2.up();
 		} else {
 			return Vector2.zero();
 		}
@@ -163,8 +162,8 @@ public class Vector2 {
 
 		for (int x = -IGS.BLOCK_SIZE; x <= IGS.BLOCK_SIZE; x += IGS.BLOCK_SIZE) {
 			Vector2 tmp = new Vector2(next.x + x, next.y);
-			int tileIndex = GameManager.getInstance().getTileMap()
-					.getTileIndex(tmp.y / IGS.BLOCK_SIZE, tmp.x / IGS.BLOCK_SIZE);
+			int tileIndex = GameManager.getInstance().getTileMap().getTileIndex(tmp.y / IGS.BLOCK_SIZE,
+					tmp.x / IGS.BLOCK_SIZE);
 			Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
 			if (tile.getIsCollision() == false) {
 				double curDist = Vector2.distance(current, tmp);
@@ -177,8 +176,8 @@ public class Vector2 {
 
 		for (int y = -IGS.BLOCK_SIZE; y <= IGS.BLOCK_SIZE; y += IGS.BLOCK_SIZE) {
 			Vector2 tmp = new Vector2(next.x, next.y + y);
-			int tileIndex = GameManager.getInstance().getTileMap()
-					.getTileIndex(tmp.y / IGS.BLOCK_SIZE, tmp.x / IGS.BLOCK_SIZE);
+			int tileIndex = GameManager.getInstance().getTileMap().getTileIndex(tmp.y / IGS.BLOCK_SIZE,
+					tmp.x / IGS.BLOCK_SIZE);
 			Tile tile = GameManager.getInstance().getTileMap().getTile(tileIndex);
 			if (tile.getIsCollision() == false) {
 				double curDist = Vector2.distance(current, tmp);
@@ -193,7 +192,12 @@ public class Vector2 {
 		return res;
 	}
 
-	public Vector2 divide (int scale) {
+	public Vector2 divide(int scale) {
 		return new Vector2(x / scale, y / scale);
+	}
+
+	@Override
+	public String toString() {
+		return "(" + this.x + ", " + this.y + ")";
 	}
 }
